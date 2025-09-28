@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    :root {
+        /* Global Text Colors */
+        --text-primary: #eeeeee;
+        --text-secondary: #eeeeee7f;
+        --text-tertiary: #eeeeeebf;
+        --text-white: #ffffff;
+
+        /* Global Background Colors */
+        --bg-overlay: #0000007f;
+        --bg-accent: #00adb5;
+        --bg-accent-light: #00adb533;
+        --bg-dark: #222831;
+        --bg-secondary: #393e46;
+        --bg-secondary-light: #393e467f;
+        --bg-secondary-medium: #393e46bf;
+        --bg-white: #ffffff;
+
+        /* Global Border Colors */
+        --border-dark: #000000;
+
+        /* Typography Variables */
+        --font-size-base: 18px;
+        --font-size-lg: 24px;
+        --font-size-xl: 64px;
+        --font-size-2xl: 96px;
+
+        /* Font Weight Variables */
+        --font-weight-normal: 400;
+        --font-weight-bold: 700;
+
+        /* Line Height Variables */
+        --line-height-base: 27px;
+        --line-height-lg: 36px;
+        --line-height-xl: 80px;
+        --line-height-2xl: 96px;
+
+        /* Font Family Variables */
+        --font-family-heading: 'Oswald', sans-serif;
+        --font-family-body: 'Poppins', sans-serif;
+
+        /* Spacing Variables */
+        --spacing-xs: 4px;
+        --spacing-sm: 8px;
+        --spacing-md: 16px;
+        --spacing-lg: 24px;
+        --spacing-xl: 32px;
+        --spacing-2xl: 48px;
+
+        /* Border Radius Variables */
+        --radius-sm: 16px;
+        --radius-md: 22px;
+        --radius-lg: 24px;
+        --radius-xl: 94px;
+        --radius-2xl: 174px;
+
+        /* Component-specific Colors */
+        --header-text: #eeeeee;
+        --button-bg-primary: #00adb5;
+        --button-bg-secondary: #393e467f;
+        --button-bg-tertiary: #393e46bf;
+        --button-text: #eeeeee;
+        --input-bg: #393e467f;
+        --input-text: #eeeeee7f;
+        --footer-bg: #222831;
+        --line-accent: #00adb533;
+    }
+}
