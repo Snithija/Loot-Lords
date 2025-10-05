@@ -1,102 +1,125 @@
-import React from 'react';
-import IconButton from '../ui/IconButton';
+// Footer.jsx
+import React from "react";
+import { Link } from "react-router-dom"; // ✅ Import Link
+import store from '../../assets/imgs/store.png'
+// import face from '../assets/imgs/face.png'
+import face from '../../assets/imgs/face.png'
+import x from '../../assets/imgs/x.png'
+import insta from '../../assets/imgs/insta.png'
+import yt from '../../assets/imgs/yt.png'
+import location from '../../assets/imgs/location.png'
+import email from '../../assets/imgs/email.png'
+import app from '../../assets/imgs/app.png'
+import google from '../../assets/imgs/google.png'
 
-const Footer = () => {
-  const navigationItems = [
-    { icon: '/images/img_home.svg', text: 'Home', href: '#home' },
-    { icon: '/images/img_user.svg', text: 'About me', href: '#about' },
-    { icon: '/images/img_phone.svg', text: 'Contact', href: '#contact' }
-  ];
-
-  const socialLinks = [
-    { icon: '/images/img_facebook.svg', href: '#', alt: 'Facebook' },
-    { icon: '/images/img_frame_26.svg', href: '#', alt: 'LinkedIn' },
-    { icon: '/images/img_twitter.svg', href: '#', alt: 'Twitter' },
-    { icon: '/images/img_youtube.svg', href: '#', alt: 'YouTube' }
-  ];
-
-  const handleNavClick = (href) => {
-    const targetId = href?.replace('#', '');
-    const targetElement = document.getElementById(targetId);
-    if (targetElement) {
-      targetElement?.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
-  return (
-    <footer className="w-full bg-bg-footer-background">
-      <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col items-center justify-end pt-16 md:pt-24 pb-8">
-          {/* Navigation Links */}
-          <div className="flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-8 md:gap-16 w-full max-w-2xl mb-8 md:mb-12">
-            {navigationItems?.map((item, index) => (
-              <button
-                key={index}
-                onClick={() => handleNavClick(item?.href)}
-                className="flex items-center gap-2 p-2 hover:text-bg-background-accent transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-bg-background-accent focus:ring-offset-2"
-              >
-                <img 
-                  src={item?.icon} 
-                  alt={item?.text}
-                  className="w-6 h-6"
-                />
-                <span 
-                  className="text-text-primary"
-                  style={{
-                    fontSize: '18px',
-                    fontFamily: 'Poppins',
-                    fontWeight: '400',
-                    lineHeight: '27px',
-                    color: '#eeeeee'
-                  }}
-                >
-                  {item?.text}
-                </span>
-              </button>
-            ))}
-          </div>
-
-          {/* Social Media Links */}
-          <div className="flex justify-center items-center gap-4 md:gap-6 mb-8 md:mb-12">
-            {socialLinks?.map((social, index) => (
-              <IconButton
-                key={index}
-                src={social?.icon}
-                alt={social?.alt}
-                fillStyleCss="background-color=#393e46"
-                borderStyleCss="border_radius=24px"
-                padding="t=12px,r=12px,b=12px,l=12px"
-                effect_box_shadow=""
-                layout_width="auto"
-                margin=""
-                position="relative"
-                variant="default"
-                size="medium"
-                className="hover:opacity-80 transition-opacity duration-200"
-                onClick={() => window.open(social?.href, '_blank')}
-              />
-            ))}
-          </div>
-
-          {/* Terms and Privacy */}
-          <div className="flex justify-center items-center p-4 md:p-12">
-            <p 
-              className="text-center text-text-tertiary"
-              style={{
-                fontSize: '18px',
-                fontFamily: 'Poppins',
-                fontWeight: '400',
-                lineHeight: '27px',
-                color: '#eeeeeebf'
-              }}
-            >
-              Terms of Service - Privacy Policy
-            </p>
-          </div>
+const Footer = () => (
+  <footer className="w-full bg-[#1A371F] px-6 py-12 md:px-16 md:py-16">
+    <div className="flex flex-col md:flex-row justify-between gap-12 md:gap-8 max-w-[1310px] mx-auto">
+      {/* Left: Logo and Newsletter */}
+      <div className="w-full md:w-[294px]">
+        <div className="flex items-center gap-2 mb-6">
+          <img src={store} alt="StoreOne Logo" className="w-8 h-8" />
+          <span className="font-plus font-bold text-2xl text-white">
+            StoreOne
+          </span>
+        </div>
+        <div className="mb-5 font-plus font-semibold text-base md:text-lg text-white">
+          Subscribe to Our NewsLetter
+        </div>
+        <form className="relative w-full h-10 mb-6 flex">
+          <input
+            type="email"
+            placeholder="Your email address"
+            className="flex-1 rounded-full px-4 py-2 text-xs text-gray-600 bg-gray-300 outline-none"
+          />
+          <button
+            type="submit"
+            className="absolute right-0 top-0 h-full px-4 rounded-full bg-[#5DA96A] text-white text-xs font-medium"
+          >
+            Subscribe
+          </button>
+        </form>
+        <div className="flex gap-4">
+          <img src={face} className="w-8 h-8" alt="Facebook" />
+          <img src={x} className="w-8 h-8" alt="X" />
+          <img src={insta} className="w-8 h-8" alt="Instagram" />
+          <img src={yt} className="w-8 h-8" alt="YouTube" />
         </div>
       </div>
-    </footer>
-  );
-};
+
+      {/* Middle: Support */}
+      <div className="w-full md:w-[177px]">
+        <div className="font-plus font-bold text-2xl text-white mb-8">
+          Support
+        </div>
+        <ul className="flex flex-col gap-5">
+          <li>
+            <Link to="/faq" className="font-semibold text-lg text-white hover:underline">
+              FAQ
+            </Link>
+          </li>
+          <li>
+            <Link to="/return-exchange" className="font-semibold text-lg text-white hover:underline">
+              Return & Exchange
+            </Link>
+          </li>
+          <li>
+            <Link to="/shipping" className="font-semibold text-lg text-white hover:underline">
+              Shipping
+            </Link>
+          </li>
+          <li>
+            <Link to="/size-chart" className="font-semibold text-lg text-white hover:underline">
+              Size Chart
+            </Link>
+          </li>
+        </ul>
+      </div>
+
+      {/* Middle: Legal */}
+      <div className="w-full md:w-[172px]">
+        <div className="font-plus font-bold text-2xl text-white mb-8">
+          Legal
+        </div>
+        <ul className="flex flex-col gap-5">
+          <li><Link to="/cookies-policy" className="font-semibold text-lg text-white hover:underline">Cookies Policy</Link></li>
+          <li><Link to="/terms" className="font-semibold text-lg text-white hover:underline">Terms & Condition</Link></li>
+          <li><Link to="/privacy" className="font-semibold text-lg text-white hover:underline">Privacy Policy</Link></li>
+          <li><Link to="/aboutus" className="font-semibold text-lg text-white hover:underline">About Us</Link></li>
+          <li><Link to="/contact" className="font-semibold text-lg text-white hover:underline">Contact Us</Link></li>
+        </ul>
+      </div>
+
+      {/* Right: Contact */}
+      <div className="w-full md:w-[331px]">
+        <div className="font-plus font-bold text-2xl text-white mb-6">
+          Contact
+        </div>
+        {/* Address */}
+        <div className="flex items-start gap-4 mb-4">
+          <img src={location} className="w-8 h-8 rounded-full" alt="Location" />
+          <span className="font-plus font-semibold text-lg text-white">
+            Professional Services Hub <br />
+            123 Main Street, Suite 456 <br />
+            New York, NY 10001 <br />
+            USA
+          </span>
+        </div>
+        {/* Email */}
+        <div className="flex items-center gap-5 mb-6">
+          <img src={email} className="w-8 h-8" alt="Email" />
+          <span className="font-plus font-semibold text-lg text-white">
+            help@storeone.com
+          </span>
+        </div>
+        {/* App Store Badges */}
+        <div className="flex items-center gap-6">
+          <img src={app} className="w-30 h-10" alt="App Store" />
+          <img src={google} className="w-30 h-10" alt="Google Play" />
+        </div>
+      </div>
+    </div>
+  </footer>
+);
 
 export default Footer;

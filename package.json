@@ -42,6 +42,7 @@
   "dependencies": {
     "@dhiwise/component-tagger": "^1.0.10",
     "@tailwindcss/typography": "^0.5.16",
+    "axios": "^1.12.2",
     "class-variance-authority": "^0.7.1",
     "emailjs-com": "^3.2.0",
     "esbuild": "0.25.10",

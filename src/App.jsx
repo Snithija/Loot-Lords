@@ -1,8 +1,23 @@
-import Routes from './Routes';
+import Routes from "./Routes";
+import { CartProvider, useCart } from "./context/CartContext";
+import Notification from "./components/common/Notification";
+
+function AppContent() {
+  const { notification } = useCart();
+
+  return (
+    <>
+      <Routes />
+      <Notification message={notification} />
+    </>
+  );
+}
 
 function App() {
   return (
-        <Routes />
+    <CartProvider>
+      <AppContent />
+    </CartProvider>
   );
 }
 

@@ -1,23 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { cva } from 'class-variance-authority';
 import { twMerge } from 'tailwind-merge';
 
 const editTextClasses = cva(
-  'w-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed',
+  'w-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500',
   {
     variants: {
       variant: {
-        primary: 'focus:ring-blue-500',
-        secondary: 'focus:ring-gray-500',
+        default: 'border border-gray-300',
+        filled: 'border-0',
+        outline: 'border-2 bg-transparent',
       },
       size: {
         small: 'text-sm px-3 py-2',
         medium: 'text-base px-4 py-3',
-        large: 'text-lg px-5 py-4',
+        large: 'text-lg px-4 py-3',
       },
     },
     defaultVariants: {
-      variant: 'primary',
+      variant: 'default',
       size: 'medium',
     },
   }
@@ -25,73 +26,87 @@ const editTextClasses = cva(
 
 const EditText = ({
   // Required parameters with defaults
-  placeholder = "Name",
-  text_font_size = "18",
-  text_font_family = "Poppins",
-  text_font_weight = "700",
-  text_line_height = "27px",
+  placeholder = "123 456 7890",
+  text_font_size = "text-base",
+  text_font_family = "Plus Jakarta Sans",
+  text_font_weight = "font-medium",
+  text_line_height = "leading-sm",
   text_text_align = "left",
-  text_color = "#eeeeee7f",
-  fill_background_color = "#393e467f",
-  border_border_radius = "16px",
+  text_color = "text-text-light",
   
   // Optional parameters (no defaults)
+  fill_background_color,
+  border_border,
+  border_border_radius,
   layout_width,
   padding,
-  margin,
   position,
+  layout_gap,
   
   // Standard React props
   variant,
   size,
-  disabled = false,
-  className,
+  type = "text",
   value,
   onChange,
-  type = "text",
-  name,
-  id,
+  className,
+  disabled = false,
+  required = false,
   ...props
 }) => {
+  const [inputValue, setInputValue] = useState(value || '');
+
   // Safe validation for optional parameters
+  const hasValidBackgroundColor = fill_background_color && typeof fill_background_color === 'string' && fill_background_color?.trim() !== '';
+  const hasValidBorder = border_border && typeof border_border === 'string' && border_border?.trim() !== '';
+  const hasValidBorderRadius = border_border_radius && typeof border_border_radius === 'string' && border_border_radius?.trim() !== '';
   const hasValidWidth = layout_width && typeof layout_width === 'string' && layout_width?.trim() !== '';
   const hasValidPadding = padding && typeof padding === 'string' && padding?.trim() !== '';
-  const hasValidMargin = margin && typeof margin === 'string' && margin?.trim() !== '';
   const hasValidPosition = position && typeof position === 'string' && position?.trim() !== '';
+  const hasValidGap = layout_gap && typeof layout_gap === 'string' && layout_gap?.trim() !== '';
 
   // Build optional Tailwind classes
   const optionalClasses = [
     hasValidWidth ? `w-[${layout_width}]` : '',
     hasValidPadding ? `p-[${padding}]` : '',
-    hasValidMargin ? `m-[${margin}]` : '',
     hasValidPosition ? position : '',
+    hasValidGap ? `gap-[${layout_gap}]` : '',
   ]?.filter(Boolean)?.join(' ');
 
-  // Build inline styles for required parameters
+  // Build inline styles for required and optional parameters
   const inputStyles = {
-    fontSize: text_font_size ? `${text_font_size}px` : '18px',
-    fontFamily: text_font_family || 'Poppins',
-    fontWeight: text_font_weight || '700',
-    lineHeight: text_line_height || '27px',
+    fontSize: text_font_size === "text-base" ? '16px' : text_font_size,
+    fontFamily: text_font_family || 'Plus Jakarta Sans',
+    fontWeight: text_font_weight === "font-medium" ? '500' : text_font_weight,
+    lineHeight: text_line_height === "leading-sm" ? '21px' : text_line_height,
     textAlign: text_text_align || 'left',
-    color: text_color || '#eeeeee7f',
-    backgroundColor: fill_background_color || '#393e467f',
-    borderRadius: border_border_radius || '16px',
+    color: text_color === "text-text-light" ? '#9e9e9e' : text_color,
+    ...(hasValidBackgroundColor && { backgroundColor: fill_background_color }),
+    ...(hasValidBorder && { border: border_border }),
+    ...(hasValidBorderRadius && { borderRadius: border_border_radius }),
+  };
+
+  const handleInputChange = (e) => {
+    const newValue = e?.target?.value;
+    setInputValue(newValue);
+    if (onChange) {
+      onChange(e);
+    }
   };
 
   return (
     <input
       type={type}
       placeholder={placeholder}
-      value={value}
-      onChange={onChange}
+      value={inputValue}
+      onChange={handleInputChange}
       disabled={disabled}
-      name={name}
-      id={id}
+      required={required}
       style={inputStyles}
       className={twMerge(
         editTextClasses({ variant, size }),
         optionalClasses,
+        disabled && 'opacity-50 cursor-not-allowed',
         className
       )}
       aria-disabled={disabled}

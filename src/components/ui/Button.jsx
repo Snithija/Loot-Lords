@@ -7,9 +7,9 @@ const buttonClasses = cva(
   {
     variants: {
       variant: {
-        primary: 'hover:opacity-90 focus:ring-blue-500',
+        primary: 'hover:opacity-90 focus:ring-green-500',
         secondary: 'bg-gray-200 text-gray-800 hover:bg-gray-300 focus:ring-gray-500',
-        outline: 'border-2 bg-transparent hover:bg-opacity-10 focus:ring-blue-500',
+        outline: 'border-2 bg-transparent hover:bg-opacity-10 focus:ring-green-500',
       },
       size: {
         small: 'text-sm px-3 py-1.5',
@@ -26,24 +26,21 @@ const buttonClasses = cva(
 
 const Button = ({
   // Required parameters with defaults
-  text = "Hire me",
-  text_font_size = "18",
-  text_font_family = "Poppins",
+  text = "Shop Now",
+  text_font_size = "20",
+  text_font_family = "Plus Jakarta Sans",
   text_font_weight = "700",
-  text_line_height = "27px",
+  text_line_height = "26px",
   text_text_align = "left",
-  text_color = "#eeeeee",
-  fill_background_color = "#00adb5",
-  border_border_radius = "22px",
+  text_color = "#ffffff",
+  fill_background_color = "#5da96a",
+  border_border_radius = "4px",
   
   // Optional parameters (no defaults)
-  effect_box_shadow,
-  layout_align_self,
   layout_width,
   padding,
-  position,
-  layout_gap,
   margin,
+  position,
   
   // Standard React props
   variant,
@@ -56,35 +53,29 @@ const Button = ({
   ...props
 }) => {
   // Safe validation for optional parameters
-  const hasValidBoxShadow = effect_box_shadow && typeof effect_box_shadow === 'string' && effect_box_shadow?.trim() !== '';
-  const hasValidAlignSelf = layout_align_self && typeof layout_align_self === 'string' && layout_align_self?.trim() !== '';
   const hasValidWidth = layout_width && typeof layout_width === 'string' && layout_width?.trim() !== '';
   const hasValidPadding = padding && typeof padding === 'string' && padding?.trim() !== '';
-  const hasValidPosition = position && typeof position === 'string' && position?.trim() !== '';
-  const hasValidGap = layout_gap && typeof layout_gap === 'string' && layout_gap?.trim() !== '';
   const hasValidMargin = margin && typeof margin === 'string' && margin?.trim() !== '';
+  const hasValidPosition = position && typeof position === 'string' && position?.trim() !== '';
 
   // Build optional Tailwind classes
   const optionalClasses = [
-    hasValidBoxShadow ? `shadow-[${effect_box_shadow}]` : '',
-    hasValidAlignSelf ? `self-${layout_align_self}` : '',
     hasValidWidth ? `w-[${layout_width}]` : '',
     hasValidPadding ? `p-[${padding}]` : '',
-    hasValidPosition ? position : '',
-    hasValidGap ? `gap-[${layout_gap}]` : '',
     hasValidMargin ? `m-[${margin}]` : '',
+    hasValidPosition ? position : '',
   ]?.filter(Boolean)?.join(' ');
 
   // Build inline styles for required parameters
   const buttonStyles = {
-    fontSize: text_font_size ? `${text_font_size}px` : '18px',
-    fontFamily: text_font_family || 'Poppins',
-    fontWeight: text_font_weight || '700',
-    lineHeight: text_line_height || '27px',
-    textAlign: text_text_align || 'center',
-    color: text_color || '#eeeeee',
-    backgroundColor: fill_background_color || '#00adb5',
-    borderRadius: border_border_radius || '22px',
+    fontSize: `${text_font_size}px`,
+    fontFamily: text_font_family,
+    fontWeight: text_font_weight,
+    lineHeight: text_line_height,
+    textAlign: text_text_align,
+    color: text_color,
+    backgroundColor: fill_background_color,
+    borderRadius: border_border_radius,
   };
 
   // Safe click handler
