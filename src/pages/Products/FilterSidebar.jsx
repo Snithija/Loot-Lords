@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import CheckBox from '../../components/ui/checkBox';
+// import CheckBox from '../../components/ui/CheckBox';
+import CheckBox from '../../components/ui/CheckBox';
 // ...existing code...
 import EditText from '../../components/ui/EditText';
 import SeekBar from '../../components/ui/SeekBar';
 
 const FilterSidebar = () => {
-  const [sortBy, setSortBy] = useState('newest');
+
+    const [sortBy, setSortBy] = useState('newest');
   const [priceRange, setPriceRange] = useState({ min: 0, max: 330 });
   const [selectedBrands, setSelectedBrands] = useState(['levis']);
   const [selectedColors, setSelectedColors] = useState(['black']);
