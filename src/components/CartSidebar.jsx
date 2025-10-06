@@ -4,27 +4,16 @@ import userIcon from "../assets/imgs/usericon.png";
 import basket from "../assets/imgs/basket.png";
 import addr from "../assets/imgs/addr.png";
 import { useEffect, useState } from "react";
-import axios from "axios";
 
 function CartSidebar() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
-        const res = await axios.get("http://localhost:5000/api/auth/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (res.data?.user) {
-          setUser(res.data.user);
-        }
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchUser();
+    // Load user info from localStorage
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setUser(storedUser);
+    }
   }, []);
 
   const baseClasses =
