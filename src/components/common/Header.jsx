@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+
 import { fetchMe } from "../../services/auth";
 import CartButton from "./CartButton";
+import React, { useState, useEffect, useRef } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -12,26 +13,12 @@ const Header = () => {
   const location = useLocation();
   const dropdownRef = useRef(null);
 
-  // helper: active path check
-  const isActive = (path) =>
-    location.pathname === path || location.pathname.startsWith(path);
-
-  const handleLoginClick = () => navigate("/signin");
-
-  // Load current user if token exists
+  // Load user info from localStorage
   useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        const u = await fetchMe(); // returns null if not logged in
-        if (mounted) setUser(u);
-      } catch {
-        if (mounted) setUser(null);
-      }
-    })();
-    return () => {
-      mounted = false;
-    };
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    if (storedUser) {
+      setUser(storedUser);
+    }
   }, [location.pathname]);
 
   // Close dropdown when clicking outside
@@ -47,11 +34,17 @@ const Header = () => {
   }, [userDropdownOpen]);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setUser(null);
     setUserDropdownOpen(false);
     navigate("/signin");
   };
+
+  const handleLoginClick = () => navigate("/signin");
+
+  // Helper: active path check
+  const isActive = (path) => 
+    location.pathname === path || location.pathname.startsWith(path);
 
   return (
     <header className="w-full bg-white border-b border-gray-200 shadow-sm">
@@ -62,11 +55,7 @@ const Header = () => {
             className="flex items-center gap-2 cursor-pointer"
             onClick={() => navigate("/")}
           >
-            <img
-              src="/images/img_frame.svg"
-              alt="StoreOne Logo"
-              className="w-8 h-8"
-            />
+            <img src="/images/img_frame.svg" alt="StoreOne Logo" className="w-8 h-8" />
             <span className="text-xl lg:text-2xl font-bold text-gray-900 font-['Plus_Jakarta_Sans']">
               StoreOne
             </span>
@@ -99,14 +88,8 @@ const Header = () => {
                   }`}
                 >
                   Category
-                  <img
-                    src="/images/img_vector.svg"
-                    alt="Dropdown"
-                    className="w-4 h-2"
-                  />
+                  <img src="/images/img_vector.svg" alt="Dropdown" className="w-4 h-2" />
                 </button>
-
-                {/* Dropdown Menu */}
                 <div className="absolute top-full left-0 hidden group-hover:block bg-white shadow-lg rounded-lg py-2 min-w-[150px] z-50 mt-1">
                   <button
                     onClick={() => navigate("/products?cat=clothing")}
@@ -129,7 +112,7 @@ const Header = () => {
                 </div>
               </div>
 
-              {/* Promo (aligned to /promo-products) */}
+              {/* Promo */}
               <button
                 onClick={() => navigate("/promo-products")}
                 className={`text-lg font-semibold transition-colors font-['Plus_Jakarta_Sans'] ${
@@ -141,7 +124,6 @@ const Header = () => {
                 Promo
               </button>
             </nav>
-
             {/* Search Bar */}
             <div className="flex-1 max-w-md">
               <div className="relative">
@@ -151,11 +133,7 @@ const Header = () => {
                   className="w-full pl-12 pr-4 py-3 text-gray-700 bg-gray-100 rounded-full border-none focus:outline-none focus:ring-2 focus:ring-green-500 font-['Plus_Jakarta_Sans'] text-base"
                 />
                 <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                  <img
-                    src="/images/img_search.svg"
-                    alt="Search"
-                    className="w-5 h-5"
-                  />
+                  <img src="/images/img_search.svg" alt="Search" className="w-5 h-5" />
                 </div>
               </div>
             </div>
@@ -163,15 +141,11 @@ const Header = () => {
 
           {/* Right Section - Icons */}
           <div className="flex items-center space-x-4">
-            {/* Language (dummy) */}
+            {/* Language */}
             <div className="relative group">
               <button className="flex items-center gap-1 hover:opacity-80 transition-opacity">
                 <img src="/images/img_flag.png.jpg" alt="Flag" className="w-8 h-8 rounded-full object-cover border border-gray-300" />
-                <img
-                  src="/images/img_vector.svg"
-                  alt="Dropdown"
-                  className="w-3 h-2"
-                />
+                <img src="/images/img_vector.svg" alt="Dropdown" className="w-3 h-2" />
               </button>
             </div>
 
@@ -181,11 +155,7 @@ const Header = () => {
                 className="p-2 hover:opacity-80 transition-opacity"
                 onClick={() => navigate("/favorites")}
               >
-                <img
-                  src="/images/img_favorite_icon.svg"
-                  alt="Favorites"
-                  className="w-6 h-6"
-                />
+                <img src="/images/img_favorite_icon.svg" alt="Favorites" className="w-6 h-6" />
               </button>
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center font-['Plus_Jakarta_Sans']">
                 11
@@ -200,11 +170,7 @@ const Header = () => {
                 aria-haspopup="menu"
                 aria-expanded={userDropdownOpen}
               >
-                <img
-                  src="/images/img_user_alt.svg"
-                  alt="User Account"
-                  className="w-6 h-6"
-                />
+                <img src="/images/img_user_alt.svg" alt="User Account" className="w-6 h-6" />
               </button>
 
               {userDropdownOpen && (
@@ -221,11 +187,7 @@ const Header = () => {
                       >
                         Register your account
                       </button>
-
-                      <div className="text-gray-400 font-['Plus_Jakarta_Sans'] text-xs">
-                        OR
-                      </div>
-
+                      <div className="text-gray-400 font-['Plus_Jakarta_Sans'] text-xs">OR</div>
                       <button
                         onClick={() => {
                           setUserDropdownOpen(false);
@@ -242,9 +204,7 @@ const Header = () => {
                       <div className="text-sm text-gray-500 font-['Plus_Jakarta_Sans']">
                         Signed in as
                         <br />
-                        <span className="font-semibold text-gray-800">
-                          {user.name || user.email}
-                        </span>
+                        <span className="font-semibold text-gray-800">{user.name || user.email}</span>
                       </div>
                       <button
                         onClick={() => {
@@ -278,18 +238,8 @@ const Header = () => {
               onClick={() => setMenuOpen((o) => !o)}
               aria-label="Toggle menu"
             >
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
               </svg>
             </button>
           </div>
@@ -308,102 +258,89 @@ const Header = () => {
                     className="w-full pl-12 pr-4 py-3 text-gray-700 bg-gray-100 rounded-full border-none focus:outline-none focus:ring-2 focus:ring-green-500 font-['Plus_Jakarta_Sans'] text-base"
                   />
                   <div className="absolute left-4 top-1/2 -translate-y-1/2">
-                    <img
-                      src="/images/img_search.svg"
-                      alt="Search"
-                      className="w-5 h-5"
-                    />
+                    <img src="/images/img_search.svg" alt="Search" className="w-5 h-5" />
                   </div>
                 </div>
               </div>
+              {/* Navigation Buttons */}
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate("/");
+                }}
+                className={`text-left text-lg font-semibold py-2 font-['Plus_Jakarta_Sans'] ${
+                  isActive("/") ? "text-green-600" : "text-gray-900 hover:text-green-600"
+                }`}
+              >
+                Home
+              </button>
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate("/products");
+                }}
+                className={`text-left text-lg font-semibold py-2 font-['Plus_Jakarta_Sans'] ${
+                  isActive("/products") ? "text-green-600" : "text-gray-900 hover:text-green-600"
+                }`}
+              >
+                Category
+              </button>
+              <button
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate("/promo-products");
+                }}
+                className={`text-left text-lg font-semibold py-2 font-['Plus_Jakarta_Sans'] ${
+                  isActive("/promo-products") ? "text-green-600" : "text-gray-900 hover:text-green-600"
+                }`}
+              >
+                Promo
+              </button>
 
-              {/* Mobile Navigation */}
-              <nav className="flex flex-col space-y-2 px-2">
-                <button
-                  onClick={() => {
-                    setMenuOpen(false);
-                    navigate("/");
-                  }}
-                  className={`text-left text-lg font-semibold py-2 font-['Plus_Jakarta_Sans'] ${
-                    isActive("/")
-                      ? "text-green-600"
-                      : "text-gray-900 hover:text-green-600"
-                  }`}
-                >
-                  Home
-                </button>
-                <button
-                  onClick={() => {
-                    setMenuOpen(false);
-                    navigate("/products");
-                  }}
-                  className={`text-left text-lg font-semibold py-2 font-['Plus_Jakarta_Sans'] ${
-                    isActive("/products")
-                      ? "text-green-600"
-                      : "text-gray-900 hover:text-green-600"
-                  }`}
-                >
-                  Category
-                </button>
-                <button
-                  onClick={() => {
-                    setMenuOpen(false);
-                    navigate("/promo-products");
-                  }}
-                  className={`text-left text-lg font-semibold py-2 font-['Plus_Jakarta_Sans'] ${
-                    isActive("/promo-products")
-                      ? "text-green-600"
-                      : "text-gray-900 hover:text-green-600"
-                  }`}
-                >
-                  Promo
-                </button>
-
-                {/* Auth actions for mobile */}
-                {!user ? (
-                  <div className="flex gap-3 px-2 pt-2">
-                    <button
-                      onClick={() => {
-                        setMenuOpen(false);
-                        navigate("/signin");
-                      }}
-                      className="flex-1 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors font-['Plus_Jakarta_Sans'] text-sm font-medium"
-                    >
-                      Login
-                    </button>
-                    <button
-                      onClick={() => {
-                        setMenuOpen(false);
-                        navigate("/signup");
-                      }}
-                      className="flex-1 border border-green-500 text-green-600 hover:bg-green-50 px-4 py-2 rounded-lg transition-colors font-['Plus_Jakarta_Sans'] text-sm font-medium"
-                    >
-                      Register
-                    </button>
-                  </div>
-                ) : (
-                  <div className="flex gap-3 px-2 pt-2">
-                    <button
-                      onClick={() => {
-                        setMenuOpen(false);
-                        navigate("/account");
-                      }}
-                      className="flex-1 border border-gray-300 text-gray-800 hover:bg-gray-50 px-4 py-2 rounded-lg transition-colors font-['Plus_Jakarta_Sans'] text-sm font-medium"
-                    >
-                      My Account
-                    </button>
-                    <button
-                      onClick={() => {
-                        setMenuOpen(false);
-                        handleLogout();
-                      }}
-                      className="flex-1 border border-red-600 text-red-600 hover:bg-red-50 px-4 py-2 rounded-lg transition-colors font-['Plus_Jakarta_Sans'] text-sm font-medium"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                )}
-              </nav>
+              {/* Auth actions */}
+              {!user ? (
+                <div className="flex gap-3 px-2 pt-2">
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      navigate("/signin");
+                    }}
+                    className="flex-1 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg transition-colors font-['Plus_Jakarta_Sans'] text-sm font-medium"
+                  >
+                    Login
+                  </button>
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      navigate("/signup");
+                    }}
+                    className="flex-1 border border-green-500 text-green-600 hover:bg-green-50 px-4 py-2 rounded-lg transition-colors font-['Plus_Jakarta_Sans'] text-sm font-medium"
+                  >
+                    Register
+                  </button>
+                </div>
+              ) : (
+                <div className="flex gap-3 px-2 pt-2">
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      navigate("/account");
+                    }}
+                    className="flex-1 border border-gray-300 text-gray-800 hover:bg-gray-50 px-4 py-2 rounded-lg transition-colors font-['Plus_Jakarta_Sans'] text-sm font-medium"
+                  >
+                    My Account
+                  </button>
+                  <button
+                    onClick={() => {
+                      setMenuOpen(false);
+                      handleLogout();
+                    }}
+                    className="flex-1 border border-red-600 text-red-600 hover:bg-red-50 px-4 py-2 rounded-lg transition-colors font-['Plus_Jakarta_Sans'] text-sm font-medium"
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         )}

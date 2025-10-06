@@ -3,46 +3,52 @@ import { Helmet } from "react-helmet";
 import { Link, useNavigate } from "react-router-dom";
 import Header from "../../components/common/Header";
 import Button from "../../components/ui/Button";
-import { loginUser } from "../../services/auth";
 import { toast } from "react-toastify";
-import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline"; // password visibility icons
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 const SignIn = () => {
   const navigate = useNavigate();
-  const [loginMethod, setLoginMethod] = useState("email"); // default to email so it works out of the box
+  const [loginMethod, setLoginMethod] = useState("email");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [countryCode, setCountryCode] = useState("+61");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      if (loginMethod === "phone") {
-        toast.info("Phone login coming soon. Switch to Email.");
-        return;
-      }
-      if (!email || !password) {
-        toast.error("Enter email and password");
-        return;
-      }
-      const { token } = await loginUser({ email, password });
-      localStorage.setItem("token", token);
-      toast.success("Logged in!");
-      navigate("/");
-    } catch (err) {
-      toast.error(err?.message || "Login failed");
+
+    if (loginMethod === "phone") {
+      toast.info("Phone login coming soon. Switch to Email.");
+      return;
     }
+    if (!email || !password) {
+      toast.error("Enter email and password");
+      return;
+    }
+
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    const matchedUser = users.find(
+      (u) => u.email === email && u.password === password
+    );
+
+    if (!matchedUser) {
+      toast.error("Invalid email or password");
+      return;
+    }
+
+    localStorage.setItem("user", JSON.stringify(matchedUser));
+    toast.success("Logged in!");
+    navigate("/");
   };
 
   const togglePasswordVisibility = (e) => {
-    e.preventDefault(); // don't submit form
+    e.preventDefault();
     setShowPassword((s) => !s);
   };
 
   const toggleLoginMethod = (e) => {
-    e.preventDefault(); // don't submit form
+    e.preventDefault();
     setLoginMethod((m) => (m === "phone" ? "email" : "phone"));
   };
 
@@ -53,7 +59,9 @@ const SignIn = () => {
   return (
     <>
       <Helmet>
-        <title>Sign In to Your Account | StoreOne E-commerce Platform</title>
+        <title>
+          Sign In to Your Account | StoreOne E-commerce Platform
+        </title>
         <meta
           name="description"
           content="Sign in to your StoreOne account with phone number or email. Access your shopping cart, order history, and personalized recommendations. Secure login with social media options."
@@ -108,11 +116,9 @@ const SignIn = () => {
                     </p>
                   </div>
 
-                  {/* Put inputs inside a form so Enter works and submit is handled */}
                   <form onSubmit={handleSubmit} className="flex flex-col gap-5">
                     {/* Conditionally Render Email or Phone Input */}
                     {loginMethod === "phone" ? (
-                      // PHONE INPUT
                       <div className="flex flex-col gap-2">
                         <div className="flex justify-between items-center px-3">
                           <div className="flex items-center">
@@ -159,7 +165,6 @@ const SignIn = () => {
                         </div>
                       </div>
                     ) : (
-                      // EMAIL INPUT
                       <div className="flex flex-col gap-2">
                         <div className="flex justify-between items-center px-3">
                           <div className="flex items-center">
@@ -190,7 +195,7 @@ const SignIn = () => {
                       </div>
                     )}
 
-                   {/* Password Input */}
+                    {/* Password Input */}
                     <div className="flex flex-col gap-2 px-3">
                       <label className="text-base font-medium leading-[21px] text-text-primary font-['Plus_Jakarta_Sans']">
                         Password
@@ -244,14 +249,14 @@ const SignIn = () => {
                       Or continue with
                     </p>
                     <div className="flex justify-center gap-12">
-                      <button className="w-16 h-16 rounded-full overflow-hidden hover:opacity-80 transition-opacity">
+                      <button className="w-16 h-16 rounded-full overflow-hidden hover:opacity-80 transition-opacity" aria-label="Continue with Facebook">
                         <img
                           src="/images/img_facebook.png.jpg"
                           alt="Continue with Facebook"
                           className="w-full h-full object-cover"
                         />
                       </button>
-                      <button className="w-16 h-16 rounded-full overflow-hidden hover:opacity-80 transition-opacity">
+                      <button className="w-16 h-16 rounded-full overflow-hidden hover:opacity-80 transition-opacity" aria-label="Continue with Google">
                         <img
                           src="/images/img_google.png.jpg"
                           alt="Continue with Google"
