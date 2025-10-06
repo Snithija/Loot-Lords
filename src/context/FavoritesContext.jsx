@@ -11,25 +11,55 @@ const FavoritesContext = createContext();
 export function FavoritesProvider({ children }) {
   const [ids, setIds] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem("favs_ids")) || [];
-    } catch {
+      if (typeof window !== "undefined" && window.localStorage) {
+        const stored = localStorage.getItem("favs_ids");
+        console.log("Loading favorites IDs from localStorage:", stored);
+        return stored ? JSON.parse(stored) : [];
+      }
+      return [];
+    } catch (error) {
+      console.error("Error loading favorites IDs from localStorage:", error);
       return [];
     }
   });
 
   const [itemsById, setItemsById] = useState(() => {
     try {
-      return JSON.parse(localStorage.getItem("favs_itemsById")) || {};
-    } catch {
+      if (typeof window !== "undefined" && window.localStorage) {
+        const stored = localStorage.getItem("favs_itemsById");
+        console.log("Loading favorites items from localStorage:", stored);
+        return stored ? JSON.parse(stored) : {};
+      }
+      return {};
+    } catch (error) {
+      console.error("Error loading favorites items from localStorage:", error);
       return {};
     }
   });
 
   useEffect(() => {
-    localStorage.setItem("favs_ids", JSON.stringify(ids));
+    try {
+      if (typeof window !== "undefined" && window.localStorage) {
+        localStorage.setItem("favs_ids", JSON.stringify(ids));
+        console.log("Saved favorites IDs to localStorage:", ids);
+      }
+    } catch (error) {
+      console.error("Error saving favorites IDs to localStorage:", error);
+    }
   }, [ids]);
+
   useEffect(() => {
-    localStorage.setItem("favs_itemsById", JSON.stringify(itemsById));
+    try {
+      if (typeof window !== "undefined" && window.localStorage) {
+        localStorage.setItem("favs_itemsById", JSON.stringify(itemsById));
+        console.log(
+          "Saved favorites items to localStorage:",
+          Object.keys(itemsById)
+        );
+      }
+    } catch (error) {
+      console.error("Error saving favorites items to localStorage:", error);
+    }
   }, [itemsById]);
 
   // Backfill stubs for old ids missing item details
@@ -65,20 +95,33 @@ export function FavoritesProvider({ children }) {
   };
 
   const toggle = (id, item) => {
+    console.log("Toggle called with:", { id, item });
     setIds((prev) => {
+      console.log("Previous IDs:", prev);
       if (prev.includes(id)) {
+        console.log("Removing from favorites:", id);
         setItemsById((prevItems) => {
           const next = { ...prevItems };
           delete next[id];
+          console.log("Updated items after removal:", Object.keys(next));
           return next;
         });
-        return prev.filter((x) => x !== id);
+        const newIds = prev.filter((x) => x !== id);
+        console.log("New IDs after removal:", newIds);
+        return newIds;
       } else {
-        setItemsById((prevItems) => ({
-          ...prevItems,
-          [id]: item ? item : prevItems[id] || { id },
-        }));
-        return [...prev, id];
+        console.log("Adding to favorites:", id);
+        setItemsById((prevItems) => {
+          const updated = {
+            ...prevItems,
+            [id]: item ? item : prevItems[id] || { id },
+          };
+          console.log("Updated items after addition:", Object.keys(updated));
+          return updated;
+        });
+        const newIds = [...prev, id];
+        console.log("New IDs after addition:", newIds);
+        return newIds;
       }
     });
   };

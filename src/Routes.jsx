@@ -15,6 +15,7 @@ import Checkout from "./pages/Checkout/index";
 import Pay from "./pages/Pay/index";
 import OrderSuccess from "./pages/OrderSuccess/index";
 import Favorites from "./pages/Favorites";
+import FavoritesTest from "./pages/FavoritesTest";
 import Header from "./components/common/Header";
 import Footer from "./components/common/Footer";
 
@@ -52,7 +53,7 @@ const AppRoutes = () => {
         <Route path="/account" element={<AccountInformation />} />
         <Route path="/address" element={<Address />} />
 
-        {/* ✅ Wrap only Favorites with Header + Footer */}
+        {/* ✅ Wrap Favorites with Header + Footer */}
         <Route
           path="/favorites"
           element={
@@ -60,6 +61,20 @@ const AppRoutes = () => {
               <Header />
               <main className="min-h-[60vh]">
                 <Favorites />
+              </main>
+              <Footer />
+            </>
+          }
+        />
+
+        {/* ✅ Favorites Test Page for debugging */}
+        <Route
+          path="/favorites-test"
+          element={
+            <>
+              <Header />
+              <main className="min-h-[60vh]">
+                <FavoritesTest />
               </main>
               <Footer />
             </>

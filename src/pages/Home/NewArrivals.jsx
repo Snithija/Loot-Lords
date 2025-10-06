@@ -203,26 +203,39 @@ const NewArrivals = () => {
 
                       {/* Favorite Button */}
                       <button
-                        onClick={() =>
-                          toggle(product.id, {
-                            id: product.id,
-                            name: product.name,
-                            image: product.image,
-                            rating: product.rating || 4.5,
-                            reviews: product.reviews || 0,
-                            // store numeric prices so /favorites can render cleanly
-                            price: priceNow,
-                            originalPrice: priceOld,
-                            isFlashSale: !!product.hasFlashSale,
-                          })
-                        }
-                        className="absolute top-[14px] right-[12px] bg-white rounded-[14px] p-[6px] shadow-[-2px_2px_10px_#0000003f] hover:bg-gray-50 transition-colors duration-200"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          try {
+                            console.log(
+                              "Toggling favorite for product:",
+                              product.id,
+                              product.name
+                            );
+                            toggle(product.id, {
+                              id: product.id,
+                              name: product.name,
+                              image: product.image,
+                              rating: product.rating || 4.5,
+                              reviews: product.reviews || 0,
+                              // store numeric prices so /favorites can render cleanly
+                              price: priceNow,
+                              originalPrice: priceOld,
+                              isFlashSale: !!product.hasFlashSale,
+                            });
+                            console.log("Favorite toggled successfully");
+                          } catch (error) {
+                            console.error("Error toggling favorite:", error);
+                          }
+                        }}
+                        className="absolute top-[14px] right-[12px] bg-white rounded-[14px] p-[6px] shadow-[-2px_2px_10px_#0000003f] hover:bg-gray-50 transition-colors duration-200 cursor-pointer"
                         aria-label={
                           fav ? "Remove from favorites" : "Add to favorites"
                         }
                         title={
                           fav ? "Remove from favorites" : "Add to favorites"
                         }
+                        type="button"
                       >
                         {fav ? (
                           <svg
@@ -231,6 +244,7 @@ const NewArrivals = () => {
                             viewBox="0 0 24 24"
                             fill="#ff4d4f"
                             xmlns="http://www.w3.org/2000/svg"
+                            className="transform transition-all duration-200 hover:scale-110 active:scale-95"
                           >
                             <path d="M12 21s-7.19-4.35-9.33-8.13C.8 9.7 2.2 6 5.65 6c1.93 0 3.23 1.12 4.02 2.33C10.77 7.12 12.07 6 14 6c3.45 0 4.85 3.7 2.98 6.87C19.19 16.65 12 21 12 21z" />
                           </svg>
@@ -243,6 +257,7 @@ const NewArrivals = () => {
                             stroke="#111"
                             strokeWidth="1.6"
                             xmlns="http://www.w3.org/2000/svg"
+                            className="transform transition-all duration-200 hover:scale-110 hover:stroke-red-400 active:scale-95"
                           >
                             <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z" />
                           </svg>
