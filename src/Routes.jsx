@@ -30,27 +30,30 @@ const AppRoutes = () => {
     <Router>
       <Suspense fallback={<LoadingSpinner message="Loading application..." />}>
         <Routes>
-        <Route path="/signup-phone" element={<SignupPhone />} />
-        <Route path="/signup-email" element={<SignupEmail />} />
-        <Route path="/signin" element={<SignIn />} />
-        <Route path="/" element={<HomePage />} />
-        <Route path="/products" element={<ProductsPage />} />
-        <Route path="/promo-products" element={<PromoProductsPage />} />
-        <Route path="/faq" element={<FAQ />} />
-        <Route path="/aboutus" element={<AboutUs />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/cart-test" element={<CartTest />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/pay" element={<Pay />} />
-        <Route path="/order-success" element={<OrderSuccess />} />
-        <Route path="/orders" element={<OrderHistory />} />
-        <Route path="/orders/:id" element={<OrderDetails />} />
-        <Route path="/orders/:id/paynow" element={<PaymentPage />} />
-        <Route path="/orders/:id/confirm" element={<OrderConfirmationPage />} />
-        <Route path="/account" element={<AccountInformation />} />
-        <Route path="/address" element={<Address />} />
-        <Route path="/favorites" element={<FavoritesPage />} />
-        <Route path="/product/:id" element={<ProductDetail />} />
+          <Route path="/signup-phone" element={<SignupPhone />} />
+          <Route path="/signup-email" element={<SignupEmail />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/products" element={<ProductsPage />} />
+          <Route path="/promo-products" element={<PromoProductsPage />} />
+          <Route path="/faq" element={<FAQ />} />
+          <Route path="/aboutus" element={<AboutUs />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/cart-test" element={<CartTest />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/pay" element={<Pay />} />
+          <Route path="/order-success" element={<OrderSuccess />} />
+          <Route path="/orders" element={<OrderHistory />} />
+          <Route path="/orders/:id" element={<OrderDetails />} />
+          <Route path="/orders/:id/paynow" element={<PaymentPage />} />
+          <Route
+            path="/orders/:id/confirm"
+            element={<OrderConfirmationPage />}
+          />
+          <Route path="/account" element={<AccountInformation />} />
+          <Route path="/address" element={<Address />} />
+          <Route path="/favorites" element={<FavoritesPage />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
         </Routes>
       </Suspense>
     </Router>
