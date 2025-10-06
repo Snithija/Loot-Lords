@@ -11,7 +11,7 @@ function AppContent() {
     <>
       <Routes />
       <Notification message={notification} />
-      {process.env.NODE_ENV === 'development' && <FavoritesDebugger />}
+      {process.env.NODE_ENV === "development" && <FavoritesDebugger />}
     </>
   );
 }

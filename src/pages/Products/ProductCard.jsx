@@ -36,7 +36,7 @@ const ProductCard = ({
     e?.preventDefault();
     e?.stopPropagation();
     try {
-      console.log('ProductCard - Toggling favorite for product:', id, title);
+      console.log("ProductCard - Toggling favorite for product:", id, title);
       toggle(id, {
         id,
         name: title,
@@ -57,9 +57,9 @@ const ProductCard = ({
         discount: saleValue ? Number(saleValue) : undefined,
         isFlashSale: saleType === "flash",
       });
-      console.log('ProductCard - Favorite toggled successfully');
+      console.log("ProductCard - Favorite toggled successfully");
     } catch (error) {
-      console.error('ProductCard - Error toggling favorite:', error);
+      console.error("ProductCard - Error toggling favorite:", error);
     }
   };
 
@@ -93,10 +93,10 @@ const ProductCard = ({
             type="button"
           >
             {favorite ? (
-              <svg 
-                width="20" 
-                height="20" 
-                viewBox="0 0 24 24" 
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
                 fill="#ff4d4f"
                 className="transform transition-all duration-200 hover:scale-110 active:scale-95"
               >

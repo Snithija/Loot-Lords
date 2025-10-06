@@ -8,7 +8,7 @@ const FavoritesDebugger = () => {
   // Add log function
   const addLog = (message) => {
     const timestamp = new Date().toLocaleTimeString();
-    setLogs(prev => [...prev.slice(-9), `[${timestamp}] ${message}`]);
+    setLogs((prev) => [...prev.slice(-9), `[${timestamp}] ${message}`]);
   };
 
   useEffect(() => {
@@ -19,7 +19,11 @@ const FavoritesDebugger = () => {
   const testProducts = [
     { id: 1, name: "NewArrivals - Hoodie Gray", page: "Home/NewArrivals" },
     { id: 101, name: "PopularItems - Vans Magenta", page: "Home/PopularItems" },
-    { id: 201, name: "ProductCard - Hoodie Gray", page: "Products/ProductCard" },
+    {
+      id: 201,
+      name: "ProductCard - Hoodie Gray",
+      page: "Products/ProductCard",
+    },
     { id: 301, name: "PromoGrid - Beach Hat", page: "Promos/ProductGrid" },
   ];
 
@@ -34,7 +38,9 @@ const FavoritesDebugger = () => {
         rating: 4.5,
         reviews: 60,
       });
-      addLog(`✅ Success: ${isFav(product.id) ? "Added to" : "Removed from"} favorites`);
+      addLog(
+        `✅ Success: ${isFav(product.id) ? "Added to" : "Removed from"} favorites`
+      );
     } catch (error) {
       addLog(`❌ Error: ${error.message}`);
     }
@@ -51,20 +57,26 @@ const FavoritesDebugger = () => {
 
       {/* Current Status */}
       <div className="mb-3 p-2 bg-gray-50 rounded text-xs">
-        <p><strong>IDs:</strong> [{ids.join(", ")}]</p>
-        <p><strong>Total:</strong> {list().length} favorites</p>
+        <p>
+          <strong>IDs:</strong> [{ids.join(", ")}]
+        </p>
+        <p>
+          <strong>Total:</strong> {list().length} favorites
+        </p>
       </div>
 
       {/* Test Buttons */}
       <div className="space-y-2 mb-3">
-        {testProducts.map(product => {
+        {testProducts.map((product) => {
           const isFavorite = isFav(product.id);
           return (
             <button
               key={product.id}
               onClick={() => handleTestToggle(product)}
               className={`w-full text-left p-2 rounded text-xs ${
-                isFavorite ? "bg-red-100 text-red-800" : "bg-green-100 text-green-800"
+                isFavorite
+                  ? "bg-red-100 text-red-800"
+                  : "bg-green-100 text-green-800"
               }`}
             >
               <div className="flex justify-between items-center">
@@ -84,7 +96,7 @@ const FavoritesDebugger = () => {
         <button
           onClick={() => {
             addLog("Clearing all favorites...");
-            ids.forEach(id => toggle(id));
+            ids.forEach((id) => toggle(id));
           }}
           className="flex-1 bg-red-500 text-white py-1 px-2 rounded text-xs"
         >
@@ -95,7 +107,7 @@ const FavoritesDebugger = () => {
             addLog("Checking localStorage...");
             console.log("localStorage check:", {
               ids: localStorage.getItem("favs_ids"),
-              items: localStorage.getItem("favs_itemsById")
+              items: localStorage.getItem("favs_itemsById"),
             });
           }}
           className="flex-1 bg-blue-500 text-white py-1 px-2 rounded text-xs"
@@ -117,9 +129,12 @@ const FavoritesDebugger = () => {
       {/* Toggle Visibility */}
       <button
         onClick={() => {
-          const debugPanel = document.querySelector('[data-favorites-debugger]');
+          const debugPanel = document.querySelector(
+            "[data-favorites-debugger]"
+          );
           if (debugPanel) {
-            debugPanel.style.display = debugPanel.style.display === 'none' ? 'block' : 'none';
+            debugPanel.style.display =
+              debugPanel.style.display === "none" ? "block" : "none";
           }
         }}
         className="absolute -top-2 -right-2 bg-gray-500 text-white w-6 h-6 rounded-full text-xs"

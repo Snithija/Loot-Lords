@@ -149,7 +149,11 @@ const ProductGrid = () => {
                         e.preventDefault();
                         e.stopPropagation();
                         try {
-                          console.log('Promos - Toggling favorite for product:', product.id, product.name);
+                          console.log(
+                            "Promos - Toggling favorite for product:",
+                            product.id,
+                            product.name
+                          );
                           toggle(product.id, {
                             id: product.id,
                             name: product.name,
@@ -162,9 +166,12 @@ const ProductGrid = () => {
                             discount: product.discount,
                             isFlashSale: !!product.isFlashSale,
                           });
-                          console.log('Promos - Favorite toggled successfully');
+                          console.log("Promos - Favorite toggled successfully");
                         } catch (error) {
-                          console.error('Promos - Error toggling favorite:', error);
+                          console.error(
+                            "Promos - Error toggling favorite:",
+                            error
+                          );
                         }
                       }}
                       className="bg-white rounded-[14px] p-[6px] shadow-[-2px_2px_10px_#0000003f] hover:scale-105 transition-transform cursor-pointer"
