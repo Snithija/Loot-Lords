@@ -1,5 +1,6 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoadingSpinner from "./components/common/LoadingSpinner";
 
 // Import page components
 import HomePage from "./pages/Home";
@@ -15,8 +16,6 @@ import CartTest from "./pages/CartTest/index";
 import Checkout from "./pages/Checkout/index";
 import Pay from "./pages/Pay/index";
 import OrderSuccess from "./pages/OrderSuccess/index";
-import Favorites from "./pages/Favorites";
-
 import OrderHistory from "./pages/UserAccount/OrderHistory";
 import OrderDetails from "./pages/UserAccount/OrderDetails";
 import PaymentPage from "./pages/UserAccount/PaymentPage";
@@ -29,7 +28,8 @@ import ProductDetail from "./pages/ProductDetail/index";
 const AppRoutes = () => {
   return (
     <Router>
-      <Routes>
+      <Suspense fallback={<LoadingSpinner message="Loading application..." />}>
+        <Routes>
         <Route path="/signup-phone" element={<SignupPhone />} />
         <Route path="/signup-email" element={<SignupEmail />} />
         <Route path="/signin" element={<SignIn />} />
@@ -51,7 +51,8 @@ const AppRoutes = () => {
         <Route path="/address" element={<Address />} />
         <Route path="/favorites" element={<FavoritesPage />} />
         <Route path="/product/:id" element={<ProductDetail />} />
-      </Routes>
+        </Routes>
+      </Suspense>
     </Router>
   );
 };
