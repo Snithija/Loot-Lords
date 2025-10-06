@@ -47,11 +47,10 @@ const AppRoutes = () => {
       <Suspense fallback={<div style={{padding: '20px'}}>Loading...</div>}>
         <Routes>
           <Route path="/test" element={<TestHome />} />
-          <Route path="/original" element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/signup-phone" element={<SignupPhone />} />
           <Route path="/signup-email" element={<SignupEmail />} />
           <Route path="/signin" element={<SignIn />} />
-          <Route path="/" element={<TestHome />} />
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/promo-products" element={<PromoProductsPage />} />
           <Route path="/faq" element={<FAQ />} />

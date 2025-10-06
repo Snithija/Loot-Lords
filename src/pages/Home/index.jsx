@@ -9,33 +9,43 @@ import PopularItems from './PopularItems';
 import ServiceFeatures from './ServiceFeatures';
 
 const Home = () => {
-  return (
-    <>
-      <Helmet>
-        <title>StoreOne Fashion - 50% Off Clothing & Shoes | Premium Fashion Store</title>
-        <meta
-          name="description"
-          content="Shop premium fashion at StoreOne with 50% off clothing and shoes. Discover new arrivals, popular items, shirts, jackets, pants and accessories with competitive pricing and fast delivery."
-        />
-        <meta property="og:title" content="StoreOne Fashion - 50% Off Clothing & Shoes | Premium Fashion Store" />
-        <meta property="og:description" content="Shop premium fashion at StoreOne with 50% off clothing and shoes. Discover new arrivals, popular items, shirts, jackets, pants and accessories with competitive pricing and fast delivery." />
-      </Helmet>
+  console.log("HomePage component loading...");
+  
+  try {
+    return (
+      <>
+        <Helmet>
+          <title>Loot-Lords - Premium Fashion Store</title>
+          <meta name="description" content="Shop premium fashion at Loot-Lords with great deals on clothing and accessories." />
+        </Helmet>
 
-      <div className="flex flex-col min-h-screen bg-white">
-        <Header />
+        <div className="flex flex-col min-h-screen bg-white">
+          <Header />
         
-        <main className="flex-1">
-          <HeroSection />
-          <CategorySection />
-          <NewArrivals />
-          <PopularItems />
-          <ServiceFeatures />
-        </main>
-        
-        <Footer />
+          <main className="flex-1">
+            <HeroSection />
+            <CategorySection />
+            <NewArrivals />
+            <PopularItems />
+            <ServiceFeatures />
+          </main>
+          
+          <Footer />
+        </div>
+      </>
+    );
+  } catch (error) {
+    console.error("Error in HomePage:", error);
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center p-8">
+          <h1 className="text-3xl font-bold text-gray-800 mb-4">Loot-Lords</h1>
+          <p className="text-gray-600 mb-4">Loading homepage...</p>
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+        </div>
       </div>
-    </>
-  );
+    );
+  }
 };
 
 export default Home;
