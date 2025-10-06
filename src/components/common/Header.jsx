@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { fetchMe } from "../../services/auth";
 import CartButton from "./CartButton";
+import { useFavorites } from "../../context/FavoritesContext"; // adjust path if needed
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -12,6 +13,8 @@ const Header = () => {
   const location = useLocation();
   const dropdownRef = useRef(null);
 
+  const { count } = useFavorites();
+  const displayCount = count > 99 ? "99+" : count;
   // helper: active path check
   const isActive = (path) =>
     location.pathname === path || location.pathname.startsWith(path);
@@ -166,7 +169,11 @@ const Header = () => {
             {/* Language (dummy) */}
             <div className="relative group">
               <button className="flex items-center gap-1 hover:opacity-80 transition-opacity">
-                <img src="/images/img_flag.png.jpg" alt="Flag" className="w-8 h-8 rounded-full object-cover border border-gray-300" />
+                <img
+                  src="/images/img_flag.png.jpg"
+                  alt="Flag"
+                  className="w-8 h-8 rounded-full object-cover border border-gray-300"
+                />
                 <img
                   src="/images/img_vector.svg"
                   alt="Dropdown"
@@ -180,6 +187,8 @@ const Header = () => {
               <button
                 className="p-2 hover:opacity-80 transition-opacity"
                 onClick={() => navigate("/favorites")}
+                aria-label="Open favorites"
+                title="Favorites"
               >
                 <img
                   src="/images/img_favorite_icon.svg"
@@ -187,9 +196,12 @@ const Header = () => {
                   className="w-6 h-6"
                 />
               </button>
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center font-['Plus_Jakarta_Sans']">
-                11
-              </span>
+
+              {count > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center font-['Plus_Jakarta_Sans']">
+                  {displayCount}
+                </span>
+              )}
             </div>
 
             {/* User Dropdown */}
