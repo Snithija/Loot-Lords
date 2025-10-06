@@ -6,6 +6,7 @@ import Button from "../../components/ui/Button";
 import EditText from "../../components/ui/EditText";
 import { registerUser } from "../../services/auth";
 import { toast } from "react-toastify";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 const SignupEmail = () => {
   const navigate = useNavigate();
@@ -73,7 +74,7 @@ const SignupEmail = () => {
             <div className="w-full lg:w-[450px] relative">
                 <div className="relative w-full h-[300px] sm:h-[400px] lg:h-[800px] rounded-lg overflow-hidden">
                   <img
-                    src="/images/img_0x0.png"
+                    src="/images/img_shirt1.png.jpg"
                     alt="StoreOne promotional banner"
                     className="w-full h-full object-cover"
                   />
@@ -183,11 +184,11 @@ const SignupEmail = () => {
                       onClick={togglePasswordVisibility}
                       className="absolute right-4 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded transition-colors"
                     >
-                      <img
-                        src="/images/icons8-eye-50.png"
-                        alt={showPassword ? "Hide password" : "Show password"}
-                        className="w-6 h-6"
-                      />
+                      {showPassword ? (
+                        <EyeSlashIcon className="w-6 h-6" />
+                          ) : (
+                         <EyeIcon className="w-6 h-6" />
+                          )}
                     </button>
                   </div>
                 </div>
@@ -218,14 +219,14 @@ const SignupEmail = () => {
                 <div className="flex justify-center gap-8 lg:gap-12 mb-8">
                   <button className="hover:scale-105 transition-transform">
                     <img
-                      src="/images/img_facebook_icon.svg"
+                      src="/images/img_facebook.png.jpg"
                       alt="Continue with Facebook"
                       className="w-16 h-16"
                     />
                   </button>
                   <button className="hover:scale-105 transition-transform">
                     <img
-                      src="/images/icons8-google-32.png"
+                      src="/images/img_google.png.jpg"
                       alt="Continue with Google"
                       className="w-16 h-16"
                     />

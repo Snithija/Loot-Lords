@@ -7,6 +7,7 @@ import Button from '../../components/ui/Button';
 // import EditText from '../../components/ui/EditText';
 import EditText from '../../components/ui/EditText';
 import PhoneNumberInput from '../../components/ui/PhoneNumberInput';
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline";
 
 const SignupPhone = () => {
   const [formData, setFormData] = useState({
@@ -54,7 +55,7 @@ const SignupPhone = () => {
               {/* Background Image */}
               <div 
                 className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: 'url(/images/img_0x0.png)' }}
+                style={{ backgroundImage: 'url(/images/img_shirt1.png.jpg)' }}
               >
                 {/* Overlay Content */}
                 <div className="absolute inset-0 flex items-start justify-start p-6 sm:p-8 lg:p-[44px]">
@@ -177,11 +178,11 @@ const SignupPhone = () => {
                       onClick={togglePasswordVisibility}
                       className="absolute right-3 lg:right-[16px] top-1/2 transform -translate-y-1/2 p-1"
                     >
-                      <img 
-                        src="/images/icons8-eye-50.png" 
-                        alt={showPassword ? "Hide password" : "Show password"}
-                        className="w-6 h-6"
-                      />
+                     {showPassword ? (
+                            <EyeSlashIcon className="w-6 h-6" />
+                          ) : (
+                            <EyeIcon className="w-6 h-6" />
+                          )}
                     </button>
                   </div>
                 </div>
@@ -216,7 +217,7 @@ const SignupPhone = () => {
                   aria-label="Sign up with Facebook"
                 >
                   <img 
-                    src="/images/img_facebook_icon.svg" 
+                    src="/images/img_facebook.png.jpg" 
                     alt="Facebook" 
                     className="w-full h-full"
                   />
@@ -227,7 +228,7 @@ const SignupPhone = () => {
                   aria-label="Sign up with Google"
                 >
                   <img 
-                    src="/images/icons8-google-32.png" 
+                    src="/images/img_google.png.jpg" 
                     alt="Google" 
                     className="w-full h-full"
                   />
@@ -238,7 +239,7 @@ const SignupPhone = () => {
             {/* Sign In Link */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-2 lg:gap-[10px] px-8 sm:px-12 lg:px-[56px]">
               <span className="text-base font-semibold leading-[21px] text-text-light">
-                Already have an account
+                Already have an account?
               </span>
               <Link 
                 to="/signin" 

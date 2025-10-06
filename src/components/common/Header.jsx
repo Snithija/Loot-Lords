@@ -166,23 +166,7 @@ const Header = () => {
             {/* Language (dummy) */}
             <div className="relative group">
               <button className="flex items-center gap-1 hover:opacity-80 transition-opacity">
-                <div className="w-8 h-6 bg-blue-600 relative rounded overflow-hidden">
-                  <div className="absolute inset-0 bg-blue-600">
-                    <div
-                      className="absolute inset-0 bg-red-600"
-                      style={{
-                        clipPath:
-                          "polygon(0 0, 100% 0, 50% 50%, 0 0), polygon(100% 0, 100% 100%, 50% 50%, 100% 0), polygon(100% 100%, 0 100%, 50% 50%, 100% 100%), polygon(0 100%, 0 0, 50% 50%, 0 100%)",
-                      }}
-                    />
-                    <div className="absolute top-0 left-0 w-full h-1 bg-red-600"></div>
-                    <div className="absolute bottom-0 left-0 w-full h-1 bg-red-600"></div>
-                    <div className="absolute top-0 left-0 w-1 h-full bg-red-600"></div>
-                    <div className="absolute top-0 right-0 w-1 h-full bg-red-600"></div>
-                    <div className="absolute top-1/2 left-0 w-full h-0.5 bg-white -translate-y-1/2"></div>
-                    <div className="absolute top-0 left-1/2 w-0.5 h-full bg-white -translate-x-1/2"></div>
-                  </div>
-                </div>
+                <img src="/images/img_flag.png.jpg" alt="Flag" className="w-8 h-8 rounded-full object-cover border border-gray-300" />
                 <img
                   src="/images/img_vector.svg"
                   alt="Dropdown"

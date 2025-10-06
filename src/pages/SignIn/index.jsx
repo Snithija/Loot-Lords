@@ -5,6 +5,7 @@ import Header from "../../components/common/Header";
 import Button from "../../components/ui/Button";
 import { loginUser } from "../../services/auth";
 import { toast } from "react-toastify";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/outline"; // password visibility icons
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -77,7 +78,7 @@ const SignIn = () => {
               <div className="w-full lg:w-[450px] relative">
                 <div className="relative w-full h-[300px] sm:h-[400px] lg:h-[836px] rounded-lg overflow-hidden">
                   <img
-                    src="/images/img_0x0.png"
+                    src="/images/img_shirt.png.jpg"
                     alt="StoreOne promotional banner"
                     className="w-full h-full object-cover"
                   />
@@ -189,7 +190,7 @@ const SignIn = () => {
                       </div>
                     )}
 
-                    {/* Password Input */}
+                   {/* Password Input */}
                     <div className="flex flex-col gap-2 px-3">
                       <label className="text-base font-medium leading-[21px] text-text-primary font-['Plus_Jakarta_Sans']">
                         Password
@@ -197,7 +198,7 @@ const SignIn = () => {
                       <div className="relative">
                         <input
                           type={showPassword ? "text" : "password"}
-                          placeholder="*********"
+                          placeholder="*"
                           value={password}
                           onChange={handlePasswordChange}
                           className="w-full border border-border-primary rounded-sm bg-input-background px-4 py-4 pr-12 text-base font-bold leading-[21px] text-text-muted placeholder-text-muted font-['Plus_Jakarta_Sans'] outline-none focus:ring-2 focus:ring-green-500"
@@ -207,11 +208,11 @@ const SignIn = () => {
                           onClick={togglePasswordVisibility}
                           className="absolute right-4 top-1/2 -translate-y-1/2"
                         >
-                          <img
-                            src="/images/icons8-eye-50.png"
-                            alt="Toggle password visibility"
-                            className="w-6 h-6"
-                          />
+                          {showPassword ? (
+                            <EyeSlashIcon className="w-6 h-6" />
+                          ) : (
+                            <EyeIcon className="w-6 h-6" />
+                          )}
                         </button>
                       </div>
                     </div>
@@ -245,14 +246,14 @@ const SignIn = () => {
                     <div className="flex justify-center gap-12">
                       <button className="w-16 h-16 rounded-full overflow-hidden hover:opacity-80 transition-opacity">
                         <img
-                          src="/images/img_facebook_icon.svg"
+                          src="/images/img_facebook.png.jpg"
                           alt="Continue with Facebook"
                           className="w-full h-full object-cover"
                         />
                       </button>
                       <button className="w-16 h-16 rounded-full overflow-hidden hover:opacity-80 transition-opacity">
                         <img
-                          src="/images/icons8-google-32.png"
+                          src="/images/img_google.png.jpg"
                           alt="Continue with Google"
                           className="w-full h-full object-cover"
                         />
