@@ -54,7 +54,7 @@ const SignupPhone = () => {
               {/* Background Image */}
               <div 
                 className="absolute inset-0 bg-cover bg-center"
-                style={{ backgroundImage: 'url(/images/img_.png)' }}
+                style={{ backgroundImage: 'url(/images/img_0x0.png)' }}
               >
                 {/* Overlay Content */}
                 <div className="absolute inset-0 flex items-start justify-start p-6 sm:p-8 lg:p-[44px]">
@@ -102,7 +102,7 @@ const SignupPhone = () => {
                     value={formData?.name}
                     onChange={handleInputChange('name')}
                     required
-                    className="w-full"
+                    className="w-full h-12"
                     layout_width="full"
                     padding="medium"
                     position="static"
@@ -178,7 +178,7 @@ const SignupPhone = () => {
                       className="absolute right-3 lg:right-[16px] top-1/2 transform -translate-y-1/2 p-1"
                     >
                       <img 
-                        src="/images/img_eye_icon.svg" 
+                        src="/images/icons8-eye-50.png" 
                         alt={showPassword ? "Hide password" : "Show password"}
                         className="w-6 h-6"
                       />
@@ -216,7 +216,7 @@ const SignupPhone = () => {
                   aria-label="Sign up with Facebook"
                 >
                   <img 
-                    src="/images/img_frame_26086793.png" 
+                    src="/images/img_facebook_icon.svg" 
                     alt="Facebook" 
                     className="w-full h-full"
                   />
@@ -227,7 +227,7 @@ const SignupPhone = () => {
                   aria-label="Sign up with Google"
                 >
                   <img 
-                    src="/images/img_frame_26086794.png" 
+                    src="/images/icons8-google-32.png" 
                     alt="Google" 
                     className="w-full h-full"
                   />

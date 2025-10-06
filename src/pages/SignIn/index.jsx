@@ -208,7 +208,7 @@ const SignIn = () => {
                           className="absolute right-4 top-1/2 -translate-y-1/2"
                         >
                           <img
-                            src="/images/img_eye_icon.svg"
+                            src="/images/icons8-eye-50.png"
                             alt="Toggle password visibility"
                             className="w-6 h-6"
                           />
@@ -245,14 +245,14 @@ const SignIn = () => {
                     <div className="flex justify-center gap-12">
                       <button className="w-16 h-16 rounded-full overflow-hidden hover:opacity-80 transition-opacity">
                         <img
-                          src="/images/img_frame_26086793.png"
+                          src="/images/img_facebook_icon.svg"
                           alt="Continue with Facebook"
                           className="w-full h-full object-cover"
                         />
                       </button>
                       <button className="w-16 h-16 rounded-full overflow-hidden hover:opacity-80 transition-opacity">
                         <img
-                          src="/images/img_frame_26086794.png"
+                          src="/images/icons8-google-32.png"
                           alt="Continue with Google"
                           className="w-full h-full object-cover"
                         />
