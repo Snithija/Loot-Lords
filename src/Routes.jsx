@@ -23,6 +23,7 @@ import OrderConfirmationPage from "./pages/UserAccount/OrderConfirmationPage";
 import AccountInformation from "./pages/UserAccount/AccountInformation";
 import Address from "./pages/UserAccount/Address";
 import FavoritesPage from "./pages/Favorites/index";
+import ProductDetail from "./pages/ProductDetail/index";
 
 const AppRoutes = () => {
   return (
@@ -53,6 +54,7 @@ const AppRoutes = () => {
         <Route path="/account" element={<AccountInformation />} />
         <Route path="/address" element={<Address />} />
         <Route path="/favorites" element={<FavoritesPage />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
       </Routes>
     </Router>
   );
