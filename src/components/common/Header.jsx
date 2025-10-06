@@ -1,16 +1,104 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { fetchMe } from "../../services/auth";
+import { useFavorites } from "../../context/FavoritesContext";
 import CartButton from "./CartButton";
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [user, setUser] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [mobileSearchQuery, setMobileSearchQuery] = useState("");
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [showMobileSuggestions, setShowMobileSuggestions] = useState(false);
+  const [suggestions, setSuggestions] = useState([]);
 
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Sync search input with URL parameters on location change
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const urlSearchQuery = urlParams.get("search") || "";
+    setSearchQuery(urlSearchQuery);
+    setMobileSearchQuery(urlSearchQuery);
+  }, [location.search]);
+
+  // Generate search suggestions
+  const generateSuggestions = (query) => {
+    if (!query.trim()) return [];
+
+    const lowercaseQuery = query.toLowerCase();
+    const productSuggestions = allProducts
+      .filter(
+        (product) =>
+          product.title.toLowerCase().includes(lowercaseQuery) ||
+          product.category.toLowerCase().includes(lowercaseQuery)
+      )
+      .slice(0, 6); // Limit to 6 suggestions
+
+    // Add category suggestions
+    const categories = ["clothing", "shoes", "accessories"];
+    const categorySuggestions = categories
+      .filter((cat) => cat.toLowerCase().includes(lowercaseQuery))
+      .map((cat) => ({
+        id: `cat_${cat}`,
+        title: `${cat.charAt(0).toUpperCase() + cat.slice(1)}`,
+        category: cat,
+        isCategory: true,
+      }));
+
+    return [...categorySuggestions, ...productSuggestions];
+  };
+
+  // Handle search input changes with suggestions
+  const handleSearchInputChange = (value) => {
+    setSearchQuery(value);
+    const newSuggestions = generateSuggestions(value);
+    setSuggestions(newSuggestions);
+    setShowSuggestions(value.length > 0 && newSuggestions.length > 0);
+  };
+
+  const handleMobileSearchInputChange = (value) => {
+    setMobileSearchQuery(value);
+    const newSuggestions = generateSuggestions(value);
+    setSuggestions(newSuggestions);
+    setShowMobileSuggestions(value.length > 0 && newSuggestions.length > 0);
+  };
+
+  // Handle suggestion selection
+  const handleSuggestionClick = (suggestion) => {
+    if (suggestion.isCategory) {
+      navigate(`/products?cat=${suggestion.category}`);
+    } else {
+      setSearchQuery(suggestion.title);
+      navigate(`/products?search=${encodeURIComponent(suggestion.title)}`);
+    }
+    setShowSuggestions(false);
+    setShowMobileSuggestions(false);
+  };
   const dropdownRef = useRef(null);
+
+  const { getFavoritesCount } = useFavorites();
+
+  // Sample products data for suggestions
+  const allProducts = [
+    { id: 201, title: "Hoodie Gray", category: "clothing" },
+    { id: 202, title: "White Hoodie", category: "clothing" },
+    { id: 203, title: "Audere Hoodie", category: "clothing" },
+    { id: 204, title: "Hoodie Black White", category: "clothing" },
+    { id: 205, title: "Running Shoes Black", category: "shoes" },
+    { id: 206, title: "Casual T-Shirt", category: "clothing" },
+    { id: 207, title: "Sports Sneakers", category: "shoes" },
+    { id: 208, title: "Leather Jacket", category: "clothing" },
+    { id: 209, title: "Denim Jeans", category: "clothing" },
+    { id: 210, title: "Canvas Shoes", category: "shoes" },
+    { id: 211, title: "Winter Jacket", category: "clothing" },
+    { id: 212, title: "Leather Wallet", category: "accessories" },
+    { id: 213, title: "Sunglasses", category: "accessories" },
+    { id: 214, title: "Baseball Cap", category: "accessories" },
+  ];
 
   // helper: active path check
   const isActive = (path) =>
@@ -53,6 +141,66 @@ const Header = () => {
     navigate("/signin");
   };
 
+  // Handle search functionality
+  const handleSearch = (query) => {
+    const trimmedQuery = query?.trim() || "";
+    if (trimmedQuery) {
+      // Clean and validate the search query
+      const cleanQuery = trimmedQuery.replace(/[<>]/g, ""); // Basic XSS protection
+      if (cleanQuery.length > 0 && cleanQuery.length <= 100) {
+        // Reasonable length limit
+        navigate(`/products?search=${encodeURIComponent(cleanQuery)}`);
+      }
+    } else {
+      navigate("/products");
+    }
+  };
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    handleSearch(searchQuery);
+  };
+
+  const handleMobileSearchSubmit = (e) => {
+    e.preventDefault();
+    handleSearch(mobileSearchQuery);
+    setMenuOpen(false);
+  };
+
+  const handleSearchKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch(searchQuery);
+      setShowSuggestions(false);
+    }
+    if (e.key === "Escape") {
+      setShowSuggestions(false);
+    }
+  };
+
+  const handleMobileSearchKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearch(mobileSearchQuery);
+      setMenuOpen(false);
+      setShowMobileSuggestions(false);
+    }
+    if (e.key === "Escape") {
+      setShowMobileSuggestions(false);
+    }
+  };
+
+  // Close suggestions when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (!event.target.closest(".search-container")) {
+        setShowSuggestions(false);
+        setShowMobileSuggestions(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
   return (
     <header className="w-full bg-white border-b border-gray-200 shadow-sm">
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -71,7 +219,6 @@ const Header = () => {
               StoreOne
             </span>
           </div>
-
           {/* Center Section - Navigation & Search */}
           <div className="hidden lg:flex items-center space-x-8 flex-1 max-w-4xl mx-8">
             {/* Navigation Menu */}
@@ -143,30 +290,84 @@ const Header = () => {
             </nav>
 
             {/* Search Bar */}
-            <div className="flex-1 max-w-md">
-              <div className="relative">
+            <div className="flex-1 max-w-md search-container">
+              <form onSubmit={handleSearchSubmit} className="relative">
                 <input
                   type="text"
-                  placeholder="Search"
-                  className="w-full pl-12 pr-4 py-3 text-gray-700 bg-gray-100 rounded-full border-none focus:outline-none focus:ring-2 focus:ring-green-500 font-['Plus_Jakarta_Sans'] text-base"
+                  placeholder="Search products..."
+                  value={searchQuery}
+                  onChange={(e) => handleSearchInputChange(e.target.value)}
+                  onKeyPress={handleSearchKeyPress}
+                  onFocus={() => {
+                    if (searchQuery.trim()) {
+                      handleSearchInputChange(searchQuery);
+                    }
+                  }}
+                  className="w-full pl-12 pr-10 py-3 text-gray-700 bg-gray-100 rounded-full border-none focus:outline-none focus:ring-2 focus:ring-green-500 font-['Plus_Jakarta_Sans'] text-base"
                 />
-                <div className="absolute left-4 top-1/2 -translate-y-1/2">
+                <button
+                  type="submit"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 hover:opacity-70 transition-opacity"
+                  aria-label="Search"
+                >
                   <img
                     src="/images/img_search.svg"
                     alt="Search"
                     className="w-5 h-5"
                   />
+                </button>
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setSearchQuery("");
+                      setShowSuggestions(false);
+                    }}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 hover:opacity-70 transition-opacity text-gray-400 hover:text-gray-600"
+                    aria-label="Clear search"
+                  >
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M6 18L18 6M6 6l12 12"
+                      />
+                    </svg>
+                  </button>
+                )}
+              </form>
+
+              {/* Desktop Suggestions Dropdown */}
+              {showSuggestions && suggestions.length > 0 && (
+                <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 rounded-lg shadow-lg mt-2 z-50 max-h-60 overflow-y-auto">
+                  {suggestions.map((suggestion, index) => (
+                    <button
+                      key={suggestion.id || index}
+                      onClick={() => handleSuggestionClick(suggestion)}
+                      className="w-full text-left px-4 py-3 hover:bg-gray-100 border-b border-gray-100 last:border-b-0 text-sm text-gray-700 font-['Plus_Jakarta_Sans']"
+                    >
+                      {suggestion.title}
+                      {suggestion.isCategory && (
+                        <span className="text-xs text-gray-500 ml-2">(Category)</span>
+                      )}
+                    </button>
+                  ))}
                 </div>
-              </div>
+              )}
             </div>
           </div>
-
           {/* Right Section - Icons */}
           <div className="flex items-center space-x-4">
             {/* Language (dummy) */}
             <div className="relative group">
               <button className="flex items-center gap-1 hover:opacity-80 transition-opacity">
-                <img src="/images/img_flag.png.jpg" alt="Flag" className="w-8 h-8 rounded-full object-cover border border-gray-300" />
+                <img src="/images/Flag.png" alt="Flag" className="w-8 h-8" />
                 <img
                   src="/images/img_vector.svg"
                   alt="Dropdown"
@@ -188,7 +389,7 @@ const Header = () => {
                 />
               </button>
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center font-['Plus_Jakarta_Sans']">
-                11
+                {getFavoritesCount()}
               </span>
             </div>
 
@@ -300,21 +501,79 @@ const Header = () => {
           <div className="lg:hidden border-t border-gray-200 py-4">
             <div className="flex flex-col space-y-4">
               {/* Search Bar Mobile */}
-              <div className="px-2">
-                <div className="relative">
+              <div className="px-2 search-container">
+                <form onSubmit={handleMobileSearchSubmit} className="relative">
                   <input
                     type="text"
-                    placeholder="Search"
-                    className="w-full pl-12 pr-4 py-3 text-gray-700 bg-gray-100 rounded-full border-none focus:outline-none focus:ring-2 focus:ring-green-500 font-['Plus_Jakarta_Sans'] text-base"
+                    placeholder="Search products..."
+                    value={mobileSearchQuery}
+                    onChange={(e) => handleMobileSearchInputChange(e.target.value)}
+                    onKeyPress={handleMobileSearchKeyPress}
+                    onFocus={() => {
+                      if (mobileSearchQuery.trim()) {
+                        handleMobileSearchInputChange(mobileSearchQuery);
+                      }
+                    }}
+                    className="w-full pl-12 pr-10 py-3 text-gray-700 bg-gray-100 rounded-full border-none focus:outline-none focus:ring-2 focus:ring-green-500 font-['Plus_Jakarta_Sans'] text-base"
                   />
-                  <div className="absolute left-4 top-1/2 -translate-y-1/2">
+                  <button
+                    type="submit"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 hover:opacity-70 transition-opacity"
+                    aria-label="Search"
+                  >
                     <img
                       src="/images/img_search.svg"
                       alt="Search"
                       className="w-5 h-5"
                     />
+                  </button>
+                  {mobileSearchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setMobileSearchQuery("");
+                        setShowMobileSuggestions(false);
+                      }}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 hover:opacity-70 transition-opacity text-gray-400 hover:text-gray-600"
+                      aria-label="Clear search"
+                    >
+                      <svg
+                        className="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M6 18L18 6M6 6l12 12"
+                        />
+                      </svg>
+                    </button>
+                  )}
+                </form>
+
+                {/* Mobile Suggestions Dropdown */}
+                {showMobileSuggestions && suggestions.length > 0 && (
+                  <div className="absolute left-2 right-2 bg-white border border-gray-300 rounded-lg shadow-lg mt-2 z-50 max-h-60 overflow-y-auto">
+                    {suggestions.map((suggestion, index) => (
+                      <button
+                        key={suggestion.id || index}
+                        onClick={() => {
+                          handleSuggestionClick(suggestion);
+                          setMenuOpen(false);
+                        }}
+                        className="w-full text-left px-4 py-3 hover:bg-gray-100 border-b border-gray-100 last:border-b-0 text-sm text-gray-700 font-['Plus_Jakarta_Sans']"
+                      >
+                        {suggestion.title}
+                        {suggestion.isCategory && (
+                          <span className="text-xs text-gray-500 ml-2">(Category)</span>
+                        )}
+                      </button>
+                    ))}
                   </div>
-                </div>
+                )}
               </div>
 
               {/* Mobile Navigation */}
