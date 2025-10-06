@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { fetchMe } from "../../services/auth";
 import { useFavorites } from "../../context/FavoritesContext";
 import CartButton from "./CartButton";
-import { useFavorites } from "../../context/FavoritesContext"; // adjust path if needed
+// import { useFavorites } from "../../context/FavoritesContext"; // adjust path if needed
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
