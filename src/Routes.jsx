@@ -1,6 +1,20 @@
 import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoadingSpinner from "./components/common/LoadingSpinner";
+
+// Simple test component
+const TestHome = () => (
+  <div style={{ padding: '20px', fontFamily: 'Arial' }}>
+    <h1>Loot-Lords E-commerce</h1>
+    <p>App is working! 🎉</p>
+    <div>
+      <p>Routes available:</p>
+      <ul>
+        <li><a href="/">Home (current)</a></li>
+        <li><a href="/test">Test Route</a></li>
+      </ul>
+    </div>
+  </div>
+);
 
 // Import page components
 import HomePage from "./pages/Home";
@@ -30,13 +44,14 @@ const AppRoutes = () => {
   
   return (
     <Router>
-      <Suspense fallback={<LoadingSpinner message="Loading application..." />}>
+      <Suspense fallback={<div style={{padding: '20px'}}>Loading...</div>}>
         <Routes>
-          <Route path="/test" element={<div>Test Route Works!</div>} />
+          <Route path="/test" element={<TestHome />} />
+          <Route path="/original" element={<HomePage />} />
           <Route path="/signup-phone" element={<SignupPhone />} />
           <Route path="/signup-email" element={<SignupEmail />} />
           <Route path="/signin" element={<SignIn />} />
-          <Route path="/" element={<HomePage />} />
+          <Route path="/" element={<TestHome />} />
           <Route path="/products" element={<ProductsPage />} />
           <Route path="/promo-products" element={<PromoProductsPage />} />
           <Route path="/faq" element={<FAQ />} />
