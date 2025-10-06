@@ -4,12 +4,16 @@ import { CartProvider } from "./context/CartContext";
 import { FavoritesProvider } from "./context/FavoritesContext";
 
 function App() {
+  console.log("App component loaded");
+  
   return (
-    <CartProvider>
-      <FavoritesProvider>
-        <Routes />
-      </FavoritesProvider>
-    </CartProvider>
+    <div className="app">
+      <CartProvider>
+        <FavoritesProvider>
+          <Routes />
+        </FavoritesProvider>
+      </CartProvider>
+    </div>
   );
 }
 

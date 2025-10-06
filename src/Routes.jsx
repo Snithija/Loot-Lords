@@ -26,10 +26,13 @@ import FavoritesPage from "./pages/Favorites/index";
 import ProductDetail from "./pages/ProductDetail/index";
 
 const AppRoutes = () => {
+  console.log("Routes component loaded");
+  
   return (
     <Router>
       <Suspense fallback={<LoadingSpinner message="Loading application..." />}>
         <Routes>
+          <Route path="/test" element={<div>Test Route Works!</div>} />
           <Route path="/signup-phone" element={<SignupPhone />} />
           <Route path="/signup-email" element={<SignupEmail />} />
           <Route path="/signin" element={<SignIn />} />

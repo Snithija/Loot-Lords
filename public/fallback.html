@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loot-Lords - Loading...</title>
+    <style>
+        body { 
+            margin: 0; 
+            padding: 20px; 
+            font-family: Arial, sans-serif; 
+            background: #f5f5f5;
+        }
+        .container { 
+            max-width: 600px; 
+            margin: 50px auto; 
+            background: white; 
+            padding: 30px; 
+            border-radius: 10px; 
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status { color: #666; margin: 10px 0; }
+        .loading { color: #007bff; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Loot-Lords E-commerce</h1>
+        <div class="status loading">Loading application...</div>
+        <div class="status">If this page doesn't load, please check:</div>
+        <ul>
+            <li>JavaScript is enabled</li>
+            <li>Network connection is stable</li>
+            <li>Console for error messages</li>
+        </ul>
+        <div class="status">
+            <strong>Build Info:</strong><br>
+            - Framework: React + Vite<br>
+            - Router: React Router v6<br>
+            - Deployment: Vercel
+        </div>
+    </div>
+    <script>
+        console.log('Fallback page loaded - checking for main app...');
+        setTimeout(() => {
+            console.log('If you see this message, the main React app failed to load');
+        }, 3000);
+    </script>
+</body>
+</html>
