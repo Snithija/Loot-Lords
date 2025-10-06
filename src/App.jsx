@@ -1,7 +1,7 @@
 import Routes from "./Routes";
 import { CartProvider, useCart } from "./context/CartContext";
-import Notification from "./components/common/Notification";
 import { FavoritesProvider } from "./context/FavoritesContext";
+import Notification from "./components/common/Notification";
 
 function AppContent() {
   const { notification } = useCart();
@@ -14,12 +14,14 @@ function AppContent() {
   );
 }
 
-export default function App() {
+function App() {
   return (
-    <FavoritesProvider>
-      <CartProvider>
+    <CartProvider>
+      <FavoritesProvider>
         <AppContent />
-      </CartProvider>
-    </FavoritesProvider>
+      </FavoritesProvider>
+    </CartProvider>
   );
 }
+
+export default App;

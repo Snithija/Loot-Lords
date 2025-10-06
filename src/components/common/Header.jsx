@@ -3,10 +3,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { fetchMe } from "../../services/auth";
 import { useFavorites } from "../../context/FavoritesContext";
 import CartButton from "./CartButton";
-// import { useFavorites } from "../../context/FavoritesContext"; // adjust path if needed
 
 const Header = () => {
- const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -17,11 +16,73 @@ const Header = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
-  const dropdownRef = useRef(null);
-  const { count } = useFavorites();
-  const displayCount = count > 99 ? "99+" : count;
 
-  // Sample products data
+  // Sync search input with URL parameters on location change
+  useEffect(() => {
+    const urlParams = new URLSearchParams(location.search);
+    const urlSearchQuery = urlParams.get("search") || "";
+    setSearchQuery(urlSearchQuery);
+    setMobileSearchQuery(urlSearchQuery);
+  }, [location.search]);
+
+  // Generate search suggestions
+  const generateSuggestions = (query) => {
+    if (!query.trim()) return [];
+
+    const lowercaseQuery = query.toLowerCase();
+    const productSuggestions = allProducts
+      .filter(
+        (product) =>
+          product.title.toLowerCase().includes(lowercaseQuery) ||
+          product.category.toLowerCase().includes(lowercaseQuery)
+      )
+      .slice(0, 6); // Limit to 6 suggestions
+
+    // Add category suggestions
+    const categories = ["clothing", "shoes", "accessories"];
+    const categorySuggestions = categories
+      .filter((cat) => cat.toLowerCase().includes(lowercaseQuery))
+      .map((cat) => ({
+        id: `cat_${cat}`,
+        title: `${cat.charAt(0).toUpperCase() + cat.slice(1)}`,
+        category: cat,
+        isCategory: true,
+      }));
+
+    return [...categorySuggestions, ...productSuggestions];
+  };
+
+  // Handle search input changes with suggestions
+  const handleSearchInputChange = (value) => {
+    setSearchQuery(value);
+    const newSuggestions = generateSuggestions(value);
+    setSuggestions(newSuggestions);
+    setShowSuggestions(value.length > 0 && newSuggestions.length > 0);
+  };
+
+  const handleMobileSearchInputChange = (value) => {
+    setMobileSearchQuery(value);
+    const newSuggestions = generateSuggestions(value);
+    setSuggestions(newSuggestions);
+    setShowMobileSuggestions(value.length > 0 && newSuggestions.length > 0);
+  };
+
+  // Handle suggestion selection
+  const handleSuggestionClick = (suggestion) => {
+    if (suggestion.isCategory) {
+      navigate(`/products?cat=${suggestion.category}`);
+    } else {
+      setSearchQuery(suggestion.title);
+      navigate(`/products?search=${encodeURIComponent(suggestion.title)}`);
+    }
+    setShowSuggestions(false);
+    setShowMobileSuggestions(false);
+  };
+  const dropdownRef = useRef(null);
+
+  const { getFavoritesCount } = useFavorites();
+
+  // Sample products data for suggestions
   const allProducts = [
     { id: 201, title: "Hoodie Gray", category: "clothing" },
     { id: 202, title: "White Hoodie", category: "clothing" },
@@ -39,69 +100,29 @@ const Header = () => {
     { id: 214, title: "Baseball Cap", category: "accessories" },
   ];
 
-  useEffect(() => {
-    const urlParams = new URLSearchParams(location.search);
-    const urlSearchQuery = urlParams.get("search") || "";
-    setSearchQuery(urlSearchQuery);
-    setMobileSearchQuery(urlSearchQuery);
-  }, [location.search]);
+  // helper: active path check
+  const isActive = (path) =>
+    location.pathname === path || location.pathname.startsWith(path);
 
+  const handleLoginClick = () => navigate("/signin");
+
+  // Load current user if token exists
   useEffect(() => {
-    // Load user from localStorage
-    const storedUser = JSON.parse(localStorage.getItem("user"));
-    setUser(storedUser?.name ? storedUser : null);
+    let mounted = true;
+    (async () => {
+      try {
+        const u = await fetchMe(); // returns null if not logged in
+        if (mounted) setUser(u);
+      } catch {
+        if (mounted) setUser(null);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
   }, [location.pathname]);
 
-  const generateSuggestions = (query) => {
-    if (!query.trim()) return [];
-
-    const lowercaseQuery = query.toLowerCase();
-
-    // Product suggestions
-    const productSuggestions = allProducts.filter(product =>
-      product.title.toLowerCase().includes(lowercaseQuery) ||
-      product.category.toLowerCase().includes(lowercaseQuery)
-    ).slice(0, 6);
-
-    // Category suggestions
-    const categories = ["clothing", "shoes", "accessories"];
-    const categorySuggestions = categories
-      .filter(cat => cat.toLowerCase().includes(lowercaseQuery))
-      .map(cat => ({
-        id: `cat_${cat}`,
-        title: `${cat.charAt(0).toUpperCase() + cat.slice(1)}`,
-        category: cat,
-        isCategory: true,
-      }));
-
-    return [...categorySuggestions, ...productSuggestions];
-  };
-
-  const handleSearchInputChange = (value) => {
-    setSearchQuery(value);
-    const newSuggestions = generateSuggestions(value);
-    setSuggestions(newSuggestions);
-    setShowSuggestions(value.length > 0 && newSuggestions.length > 0);
-  };
-
-  const handleMobileSearchInputChange = (value) => {
-    setMobileSearchQuery(value);
-    const newSuggestions = generateSuggestions(value);
-    setSuggestions(newSuggestions);
-    setShowMobileSuggestions(value.length > 0 && newSuggestions.length > 0);
-  };
-
-  const handleSuggestionClick = (suggestion) => {
-    if (suggestion.isCategory) {
-      navigate(`/products?cat=${suggestion.category}`);
-    } else {
-      setSearchQuery(suggestion.title);
-      navigate(`/products?search=${encodeURIComponent(suggestion.title)}`);
-    }
-    setShowSuggestions(false);
-    setShowMobileSuggestions(false);
-  };
-
+  // Close dropdown when clicking outside
   useEffect(() => {
     function onDocClick(e) {
       if (!userDropdownOpen) return;
@@ -114,19 +135,20 @@ const Header = () => {
   }, [userDropdownOpen]);
 
   const handleLogout = () => {
-    localStorage.removeItem("user");
+    localStorage.removeItem("token");
     setUser(null);
     setUserDropdownOpen(false);
     navigate("/signin");
   };
 
-  const handleLoginClick = () => navigate("/signin");
-
+  // Handle search functionality
   const handleSearch = (query) => {
     const trimmedQuery = query?.trim() || "";
     if (trimmedQuery) {
-      const cleanQuery = trimmedQuery.replace(/[<>]/g, "");
+      // Clean and validate the search query
+      const cleanQuery = trimmedQuery.replace(/[<>]/g, ""); // Basic XSS protection
       if (cleanQuery.length > 0 && cleanQuery.length <= 100) {
+        // Reasonable length limit
         navigate(`/products?search=${encodeURIComponent(cleanQuery)}`);
       }
     } else {
@@ -149,7 +171,8 @@ const Header = () => {
     if (e.key === "Enter") {
       handleSearch(searchQuery);
       setShowSuggestions(false);
-    } else if (e.key === "Escape") {
+    }
+    if (e.key === "Escape") {
       setShowSuggestions(false);
     }
   };
@@ -159,7 +182,8 @@ const Header = () => {
       handleSearch(mobileSearchQuery);
       setMenuOpen(false);
       setShowMobileSuggestions(false);
-    } else if (e.key === "Escape") {
+    }
+    if (e.key === "Escape") {
       setShowMobileSuggestions(false);
     }
   };
@@ -177,8 +201,6 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const isActive = (path) =>
-    location.pathname === path || location.pathname.startsWith(path);
   return (
     <header className="w-full bg-white border-b border-gray-200 shadow-sm">
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
@@ -345,11 +367,7 @@ const Header = () => {
             {/* Language (dummy) */}
             <div className="relative group">
               <button className="flex items-center gap-1 hover:opacity-80 transition-opacity">
-                <img
-                  src="/images/img_flag.png.jpg"
-                  alt="Flag"
-                  className="w-8 h-8 rounded-full object-cover border border-gray-300"
-                />
+                <img src="/images/Flag.png" alt="Flag" className="w-8 h-8" />
                 <img
                   src="/images/img_vector.svg"
                   alt="Dropdown"
@@ -363,8 +381,6 @@ const Header = () => {
               <button
                 className="p-2 hover:opacity-80 transition-opacity"
                 onClick={() => navigate("/favorites")}
-                aria-label="Open favorites"
-                title="Favorites"
               >
                 <img
                   src="/images/img_favorite_icon.svg"
@@ -372,12 +388,9 @@ const Header = () => {
                   className="w-6 h-6"
                 />
               </button>
-
-              {count > 0 && (
-                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center font-['Plus_Jakarta_Sans']">
-                  {displayCount}
-                </span>
-              )}
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center font-['Plus_Jakarta_Sans']">
+                {getFavoritesCount()}
+              </span>
             </div>
 
             {/* User Dropdown */}
