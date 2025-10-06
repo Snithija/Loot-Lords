@@ -5,7 +5,6 @@ import { FavoritesProvider } from "./context/FavoritesContext";
 import Notification from "./components/common/Notification";
 import ErrorBoundary from "./components/common/ErrorBoundary";
 import AppInitializer from "./components/common/AppInitializer";
-import HealthCheck from "./components/common/HealthCheck";
 
 function AppContent() {
   const { notification } = useCart();
@@ -14,7 +13,6 @@ function AppContent() {
     <ErrorBoundary>
       <Routes />
       <Notification message={notification} />
-      <HealthCheck />
     </ErrorBoundary>
   );
 }
@@ -22,13 +20,11 @@ function AppContent() {
 function App() {
   return (
     <ErrorBoundary>
-      <AppInitializer>
-        <CartProvider>
-          <FavoritesProvider>
-            <AppContent />
-          </FavoritesProvider>
-        </CartProvider>
-      </AppInitializer>
+      <CartProvider>
+        <FavoritesProvider>
+          <AppContent />
+        </FavoritesProvider>
+      </CartProvider>
     </ErrorBoundary>
   );
 }

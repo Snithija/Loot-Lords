@@ -26,7 +26,7 @@ const HealthCheck = () => {
 
       // Check Contexts
       try {
-        import('../context/CartContext').then(() => {
+        import('../../context/CartContext').then(() => {
           setChecks(prev => ({ ...prev, contexts: true }));
         });
       } catch (error) {
