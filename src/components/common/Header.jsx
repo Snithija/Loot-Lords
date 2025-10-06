@@ -3,6 +3,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { fetchMe } from "../../services/auth";
 import { useFavorites } from "../../context/FavoritesContext";
 import CartButton from "./CartButton";
+import { useFavorites } from "../../context/FavoritesContext"; // adjust path if needed
 
 const Header = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -80,26 +81,8 @@ const Header = () => {
   };
   const dropdownRef = useRef(null);
 
-  const { getFavoritesCount } = useFavorites();
-
-  // Sample products data for suggestions
-  const allProducts = [
-    { id: 201, title: "Hoodie Gray", category: "clothing" },
-    { id: 202, title: "White Hoodie", category: "clothing" },
-    { id: 203, title: "Audere Hoodie", category: "clothing" },
-    { id: 204, title: "Hoodie Black White", category: "clothing" },
-    { id: 205, title: "Running Shoes Black", category: "shoes" },
-    { id: 206, title: "Casual T-Shirt", category: "clothing" },
-    { id: 207, title: "Sports Sneakers", category: "shoes" },
-    { id: 208, title: "Leather Jacket", category: "clothing" },
-    { id: 209, title: "Denim Jeans", category: "clothing" },
-    { id: 210, title: "Canvas Shoes", category: "shoes" },
-    { id: 211, title: "Winter Jacket", category: "clothing" },
-    { id: 212, title: "Leather Wallet", category: "accessories" },
-    { id: 213, title: "Sunglasses", category: "accessories" },
-    { id: 214, title: "Baseball Cap", category: "accessories" },
-  ];
-
+  const { count } = useFavorites();
+  const displayCount = count > 99 ? "99+" : count;
   // helper: active path check
   const isActive = (path) =>
     location.pathname === path || location.pathname.startsWith(path);
@@ -367,7 +350,11 @@ const Header = () => {
             {/* Language (dummy) */}
             <div className="relative group">
               <button className="flex items-center gap-1 hover:opacity-80 transition-opacity">
-                <img src="/images/Flag.png" alt="Flag" className="w-8 h-8" />
+                <img
+                  src="/images/img_flag.png.jpg"
+                  alt="Flag"
+                  className="w-8 h-8 rounded-full object-cover border border-gray-300"
+                />
                 <img
                   src="/images/img_vector.svg"
                   alt="Dropdown"
@@ -381,6 +368,8 @@ const Header = () => {
               <button
                 className="p-2 hover:opacity-80 transition-opacity"
                 onClick={() => navigate("/favorites")}
+                aria-label="Open favorites"
+                title="Favorites"
               >
                 <img
                   src="/images/img_favorite_icon.svg"
@@ -388,9 +377,12 @@ const Header = () => {
                   className="w-6 h-6"
                 />
               </button>
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center font-['Plus_Jakarta_Sans']">
-                {getFavoritesCount()}
-              </span>
+
+              {count > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center font-['Plus_Jakarta_Sans']">
+                  {displayCount}
+                </span>
+              )}
             </div>
 
             {/* User Dropdown */}
