@@ -6,7 +6,7 @@ import CartButton from "./CartButton";
 // import { useFavorites } from "../../context/FavoritesContext"; // adjust path if needed
 
 const Header = () => {
-  const [menuOpen, setMenuOpen] = useState(false);
+ const [menuOpen, setMenuOpen] = useState(false);
   const [userDropdownOpen, setUserDropdownOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
@@ -17,8 +17,28 @@ const Header = () => {
 
   const navigate = useNavigate();
   const location = useLocation();
+  const dropdownRef = useRef(null);
+  const { count } = useFavorites();
+  const displayCount = count > 99 ? "99+" : count;
 
-  // Sync search input with URL parameters on location change
+  // Sample products data
+  const allProducts = [
+    { id: 201, title: "Hoodie Gray", category: "clothing" },
+    { id: 202, title: "White Hoodie", category: "clothing" },
+    { id: 203, title: "Audere Hoodie", category: "clothing" },
+    { id: 204, title: "Hoodie Black White", category: "clothing" },
+    { id: 205, title: "Running Shoes Black", category: "shoes" },
+    { id: 206, title: "Casual T-Shirt", category: "clothing" },
+    { id: 207, title: "Sports Sneakers", category: "shoes" },
+    { id: 208, title: "Leather Jacket", category: "clothing" },
+    { id: 209, title: "Denim Jeans", category: "clothing" },
+    { id: 210, title: "Canvas Shoes", category: "shoes" },
+    { id: 211, title: "Winter Jacket", category: "clothing" },
+    { id: 212, title: "Leather Wallet", category: "accessories" },
+    { id: 213, title: "Sunglasses", category: "accessories" },
+    { id: 214, title: "Baseball Cap", category: "accessories" },
+  ];
+
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     const urlSearchQuery = urlParams.get("search") || "";
@@ -26,24 +46,28 @@ const Header = () => {
     setMobileSearchQuery(urlSearchQuery);
   }, [location.search]);
 
-  // Generate search suggestions
+  useEffect(() => {
+    // Load user from localStorage
+    const storedUser = JSON.parse(localStorage.getItem("user"));
+    setUser(storedUser?.name ? storedUser : null);
+  }, [location.pathname]);
+
   const generateSuggestions = (query) => {
     if (!query.trim()) return [];
 
     const lowercaseQuery = query.toLowerCase();
-    const productSuggestions = allProducts
-      .filter(
-        (product) =>
-          product.title.toLowerCase().includes(lowercaseQuery) ||
-          product.category.toLowerCase().includes(lowercaseQuery)
-      )
-      .slice(0, 6); // Limit to 6 suggestions
 
-    // Add category suggestions
+    // Product suggestions
+    const productSuggestions = allProducts.filter(product =>
+      product.title.toLowerCase().includes(lowercaseQuery) ||
+      product.category.toLowerCase().includes(lowercaseQuery)
+    ).slice(0, 6);
+
+    // Category suggestions
     const categories = ["clothing", "shoes", "accessories"];
     const categorySuggestions = categories
-      .filter((cat) => cat.toLowerCase().includes(lowercaseQuery))
-      .map((cat) => ({
+      .filter(cat => cat.toLowerCase().includes(lowercaseQuery))
+      .map(cat => ({
         id: `cat_${cat}`,
         title: `${cat.charAt(0).toUpperCase() + cat.slice(1)}`,
         category: cat,
@@ -53,7 +77,6 @@ const Header = () => {
     return [...categorySuggestions, ...productSuggestions];
   };
 
-  // Handle search input changes with suggestions
   const handleSearchInputChange = (value) => {
     setSearchQuery(value);
     const newSuggestions = generateSuggestions(value);
@@ -68,7 +91,6 @@ const Header = () => {
     setShowMobileSuggestions(value.length > 0 && newSuggestions.length > 0);
   };
 
-  // Handle suggestion selection
   const handleSuggestionClick = (suggestion) => {
     if (suggestion.isCategory) {
       navigate(`/products?cat=${suggestion.category}`);
@@ -79,33 +101,7 @@ const Header = () => {
     setShowSuggestions(false);
     setShowMobileSuggestions(false);
   };
-  const dropdownRef = useRef(null);
 
-  const { count } = useFavorites();
-  const displayCount = count > 99 ? "99+" : count;
-  // helper: active path check
-  const isActive = (path) =>
-    location.pathname === path || location.pathname.startsWith(path);
-
-  const handleLoginClick = () => navigate("/signin");
-
-  // Load current user if token exists
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        const u = await fetchMe(); // returns null if not logged in
-        if (mounted) setUser(u);
-      } catch {
-        if (mounted) setUser(null);
-      }
-    })();
-    return () => {
-      mounted = false;
-    };
-  }, [location.pathname]);
-
-  // Close dropdown when clicking outside
   useEffect(() => {
     function onDocClick(e) {
       if (!userDropdownOpen) return;
@@ -118,20 +114,19 @@ const Header = () => {
   }, [userDropdownOpen]);
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("user");
     setUser(null);
     setUserDropdownOpen(false);
     navigate("/signin");
   };
 
-  // Handle search functionality
+  const handleLoginClick = () => navigate("/signin");
+
   const handleSearch = (query) => {
     const trimmedQuery = query?.trim() || "";
     if (trimmedQuery) {
-      // Clean and validate the search query
-      const cleanQuery = trimmedQuery.replace(/[<>]/g, ""); // Basic XSS protection
+      const cleanQuery = trimmedQuery.replace(/[<>]/g, "");
       if (cleanQuery.length > 0 && cleanQuery.length <= 100) {
-        // Reasonable length limit
         navigate(`/products?search=${encodeURIComponent(cleanQuery)}`);
       }
     } else {
@@ -154,8 +149,7 @@ const Header = () => {
     if (e.key === "Enter") {
       handleSearch(searchQuery);
       setShowSuggestions(false);
-    }
-    if (e.key === "Escape") {
+    } else if (e.key === "Escape") {
       setShowSuggestions(false);
     }
   };
@@ -165,8 +159,7 @@ const Header = () => {
       handleSearch(mobileSearchQuery);
       setMenuOpen(false);
       setShowMobileSuggestions(false);
-    }
-    if (e.key === "Escape") {
+    } else if (e.key === "Escape") {
       setShowMobileSuggestions(false);
     }
   };
@@ -184,6 +177,8 @@ const Header = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const isActive = (path) =>
+    location.pathname === path || location.pathname.startsWith(path);
   return (
     <header className="w-full bg-white border-b border-gray-200 shadow-sm">
       <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
