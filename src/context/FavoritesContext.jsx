@@ -10,7 +10,7 @@ const FavoritesContext = createContext();
 
 export function FavoritesProvider({ children }) {
   const [ids, setIds] = useState(() => {
-    if (typeof window === 'undefined') return [];
+    if (typeof window === "undefined") return [];
     try {
       return JSON.parse(localStorage.getItem("favs_ids")) || [];
     } catch {
@@ -19,7 +19,7 @@ export function FavoritesProvider({ children }) {
   });
 
   const [itemsById, setItemsById] = useState(() => {
-    if (typeof window === 'undefined') return {};
+    if (typeof window === "undefined") return {};
     try {
       return JSON.parse(localStorage.getItem("favs_itemsById")) || {};
     } catch {
@@ -28,12 +28,12 @@ export function FavoritesProvider({ children }) {
   });
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       localStorage.setItem("favs_ids", JSON.stringify(ids));
     }
   }, [ids]);
   useEffect(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       localStorage.setItem("favs_itemsById", JSON.stringify(itemsById));
     }
   }, [itemsById]);
