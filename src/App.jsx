@@ -19,17 +19,24 @@ function AppContent() {
 function App() {
   console.log("🚀 Loot-Lords App starting...");
   
-  return (
-    <ErrorBoundary>
+  try {
+    return (
       <CartProvider>
         <FavoritesProvider>
-          <ErrorBoundary>
-            <AppContent />
-          </ErrorBoundary>
+          <AppContent />
         </FavoritesProvider>
       </CartProvider>
-    </ErrorBoundary>
-  );
+    );
+  } catch (error) {
+    console.error("❌ Error in App:", error);
+    return (
+      <div style={{ padding: '20px', fontFamily: 'Arial', textAlign: 'center' }}>
+        <h1>🔧 Debugging Mode</h1>
+        <p><strong>Error:</strong> {error.message}</p>
+        <p><strong>Stack:</strong> {error.stack}</p>
+      </div>
+    );
+  }
 }
 
 export default App;
