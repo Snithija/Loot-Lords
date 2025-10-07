@@ -176,8 +176,7 @@ const ProductInfo = () => {
 
     addToCart(productToAdd);
 
-    // Navigate to cart page
-    navigate("/cart");
+    // Product added successfully - notification will show automatically
   };
 
   return (
