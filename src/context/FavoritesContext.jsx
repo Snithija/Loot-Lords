@@ -10,6 +10,7 @@ const FavoritesContext = createContext();
 
 export function FavoritesProvider({ children }) {
   const [ids, setIds] = useState(() => {
+    if (typeof window === 'undefined') return [];
     try {
       return JSON.parse(localStorage.getItem("favs_ids")) || [];
     } catch {
@@ -18,6 +19,7 @@ export function FavoritesProvider({ children }) {
   });
 
   const [itemsById, setItemsById] = useState(() => {
+    if (typeof window === 'undefined') return {};
     try {
       return JSON.parse(localStorage.getItem("favs_itemsById")) || {};
     } catch {
@@ -26,10 +28,14 @@ export function FavoritesProvider({ children }) {
   });
 
   useEffect(() => {
-    localStorage.setItem("favs_ids", JSON.stringify(ids));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("favs_ids", JSON.stringify(ids));
+    }
   }, [ids]);
   useEffect(() => {
-    localStorage.setItem("favs_itemsById", JSON.stringify(itemsById));
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("favs_itemsById", JSON.stringify(itemsById));
+    }
   }, [itemsById]);
 
   // Backfill stubs for old ids missing item details
@@ -108,7 +114,19 @@ export function FavoritesProvider({ children }) {
 
 export function useFavorites() {
   const ctx = useContext(FavoritesContext);
-  if (!ctx)
-    throw new Error("useFavorites must be used within FavoritesProvider");
+  if (!ctx) {
+    console.error("useFavorites must be used within FavoritesProvider");
+    // Return a default object to prevent crashes
+    return {
+      ids: [],
+      itemsById: {},
+      count: 0,
+      isFav: () => false,
+      add: () => {},
+      remove: () => {},
+      toggle: () => {},
+      list: () => [],
+    };
+  }
   return ctx;
 }
