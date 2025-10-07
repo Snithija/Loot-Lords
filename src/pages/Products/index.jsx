@@ -7,14 +7,6 @@ import BreadCrumb from "../../components/ui/BreadCrumb";
 import FilterSidebar from "./FilterSidebar";
 import ProductGrid from "./ProductGrid";
 
-// ...existing code...
-import ProjectGrid from "./ProductGrid";
-// ...existing code...
-<div className="flex-1 bg-white border border-[#dedee1] rounded-lg p-4 sm:p-6 lg:p-8">
-  <ProjectGrid />
-</div>;
-// ...existing code...
-
 const ProductsPage = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);

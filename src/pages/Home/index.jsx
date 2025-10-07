@@ -9,43 +9,33 @@ import PopularItems from './PopularItems';
 import ServiceFeatures from './ServiceFeatures';
 
 const Home = () => {
-  console.log("HomePage component loading...");
+  console.log("🏠 HomePage component loading...");
   
-  try {
-    return (
-      <>
-        <Helmet>
-          <title>Loot-Lords - Premium Fashion Store</title>
-          <meta name="description" content="Shop premium fashion at Loot-Lords with great deals on clothing and accessories." />
-        </Helmet>
+  return (
+    <>
+      <Helmet>
+        <title>Loot-Lords - Premium Fashion E-commerce Store</title>
+        <meta name="description" content="Shop premium fashion at Loot-Lords with great deals on clothing, shoes and accessories. Discover new arrivals and popular items." />
+        <meta property="og:title" content="Loot-Lords - Premium Fashion E-commerce Store" />
+        <meta property="og:description" content="Shop premium fashion at Loot-Lords with great deals on clothing, shoes and accessories." />
+        <meta property="og:type" content="website" />
+      </Helmet>
 
-        <div className="flex flex-col min-h-screen bg-white">
-          <Header />
+      <div className="flex flex-col min-h-screen bg-white">
+        <Header />
         
-          <main className="flex-1">
-            <HeroSection />
-            <CategorySection />
-            <NewArrivals />
-            <PopularItems />
-            <ServiceFeatures />
-          </main>
-          
-          <Footer />
-        </div>
-      </>
-    );
-  } catch (error) {
-    console.error("Error in HomePage:", error);
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center p-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-4">Loot-Lords</h1>
-          <p className="text-gray-600 mb-4">Loading homepage...</p>
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
-        </div>
+        <main className="flex-1">
+          <HeroSection />
+          <CategorySection />
+          <NewArrivals />
+          <PopularItems />
+          <ServiceFeatures />
+        </main>
+        
+        <Footer />
       </div>
-    );
-  }
+    </>
+  );
 };
 
 export default Home;

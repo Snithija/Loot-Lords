@@ -1,17 +1,12 @@
 import React, { Suspense } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-// Simple test component
-const TestHome = () => (
-  <div style={{ padding: '20px', fontFamily: 'Arial' }}>
-    <h1>Loot-Lords E-commerce</h1>
-    <p>App is working! 🎉</p>
-    <div>
-      <p>Routes available:</p>
-      <ul>
-        <li><a href="/">Home (current)</a></li>
-        <li><a href="/test">Test Route</a></li>
-      </ul>
+// Loading spinner component
+const LoadingSpinner = ({ message = "Loading..." }) => (
+  <div className="min-h-screen flex items-center justify-center bg-white">
+    <div className="text-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mx-auto"></div>
+      <p className="mt-4 text-gray-600 font-medium">{message}</p>
     </div>
   </div>
 );
@@ -44,9 +39,8 @@ const AppRoutes = () => {
   
   return (
     <Router>
-      <Suspense fallback={<div style={{padding: '20px'}}>Loading...</div>}>
+      <Suspense fallback={<LoadingSpinner message="Loading application..." />}>
         <Routes>
-          <Route path="/test" element={<TestHome />} />
           <Route path="/" element={<HomePage />} />
           <Route path="/signup-phone" element={<SignupPhone />} />
           <Route path="/signup-email" element={<SignupEmail />} />

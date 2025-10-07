@@ -3,6 +3,7 @@ import Routes from "./Routes";
 import { CartProvider, useCart } from "./context/CartContext";
 import { FavoritesProvider } from "./context/FavoritesContext";
 import Notification from "./components/common/Notification";
+import ErrorBoundary from "./components/common/ErrorBoundary";
 
 function AppContent() {
   const { notification } = useCart();
@@ -16,25 +17,19 @@ function AppContent() {
 }
 
 function App() {
-  console.log("App component loaded successfully!");
+  console.log("🚀 Loot-Lords App starting...");
   
-  try {
-    return (
+  return (
+    <ErrorBoundary>
       <CartProvider>
         <FavoritesProvider>
-          <AppContent />
+          <ErrorBoundary>
+            <AppContent />
+          </ErrorBoundary>
         </FavoritesProvider>
       </CartProvider>
-    );
-  } catch (error) {
-    console.error("Error in App component:", error);
-    return (
-      <div style={{ padding: '20px', color: 'red' }}>
-        <h1>Error Loading App</h1>
-        <p>{error.message}</p>
-      </div>
-    );
-  }
+    </ErrorBoundary>
+  );
 }
 
 export default App;
