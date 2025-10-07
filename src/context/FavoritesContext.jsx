@@ -115,7 +115,6 @@ export function FavoritesProvider({ children }) {
 export function useFavorites() {
   const ctx = useContext(FavoritesContext);
   if (!ctx) {
-    console.error("useFavorites must be used within FavoritesProvider");
     // Return a default object to prevent crashes
     return {
       ids: [],
