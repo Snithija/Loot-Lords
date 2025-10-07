@@ -34,31 +34,14 @@ import Address from "./pages/UserAccount/Address";
 import FavoritesPage from "./pages/Favorites/index";
 import ProductDetail from "./pages/ProductDetail/index";
 
-// Simple test component to debug
-const SimpleTest = () => (
-  <div style={{ padding: '20px', fontFamily: 'Arial' }}>
-    <h1>🎯 Loot-Lords E-commerce</h1>
-    <p>✅ React Router is working!</p>
-    <p>✅ App component loaded successfully!</p>
-    <hr />
-    <p><strong>Available routes:</strong></p>
-    <ul>
-      <li><a href="/">Home</a></li>
-      <li><a href="/test">Test (current)</a></li>
-    </ul>
-  </div>
-);
-
 const AppRoutes = () => {
   console.log("🛤️ Routes component loaded");
   
-  try {
-    return (
-      <Router>
-        <Suspense fallback={<LoadingSpinner message="Loading application..." />}>
-          <Routes>
-            <Route path="/test" element={<SimpleTest />} />
-            <Route path="/" element={<HomePage />} />
+  return (
+    <Router>
+      <Suspense fallback={<LoadingSpinner message="Loading application..." />}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
             <Route path="/signup-phone" element={<SignupPhone />} />
             <Route path="/signup-email" element={<SignupEmail />} />
             <Route path="/signin" element={<SignIn />} />
@@ -82,19 +65,8 @@ const AppRoutes = () => {
             <Route path="/address" element={<Address />} />
             <Route path="/favorites" element={<FavoritesPage />} />
             <Route path="/product/:id" element={<ProductDetail />} />
-          </Routes>
-        </Suspense>
-      </Router>
-    );
-  } catch (error) {
-    console.error("❌ Error in Routes:", error);
-    return (
-      <div style={{ padding: '20px', color: 'red' }}>
-        <h2>Routes Error</h2>
-        <p>{error.message}</p>
-      </div>
-    );
-  }
-};
-
-export default AppRoutes;
+        </Routes>
+      </Suspense>
+    </Router>
+  );
+};export default AppRoutes;
