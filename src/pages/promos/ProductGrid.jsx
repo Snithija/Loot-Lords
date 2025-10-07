@@ -1,4 +1,5 @@
 import React, { useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import RatingBar from "../../components/ui/RatingBar";
 import { useCart } from "../../context/CartContext";
 import { useFavorites } from "../../context/FavoritesContext";
@@ -6,6 +7,7 @@ import { useFavorites } from "../../context/FavoritesContext";
 const ProductGrid = () => {
   const { addToCart } = useCart();
   const { isFav, toggle } = useFavorites();
+  const navigate = useNavigate();
 
   const products = useMemo(
     () => [
@@ -123,7 +125,8 @@ const ProductGrid = () => {
             return (
               <div
                 key={product.id}
-                className="flex flex-col gap-[14px] bg-white border border-[#cbcbcb] rounded-[16px] p-[10px] hover:shadow-lg"
+                className="flex flex-col gap-[14px] bg-white border border-[#cbcbcb] rounded-[16px] p-[10px] hover:shadow-lg cursor-pointer"
+                onClick={() => navigate(`/product/${product.id}`)}
               >
                 <div className="relative w-full h-[200px] sm:h-[240px] lg:h-[294px]">
                   <img
@@ -145,7 +148,8 @@ const ProductGrid = () => {
                     </div>
 
                     <button
-                      onClick={() =>
+                      onClick={(e) => {
+                        e.stopPropagation();
                         toggle(product.id, {
                           id: product.id,
                           name: product.name,
@@ -156,8 +160,8 @@ const ProductGrid = () => {
                           originalPrice: product.originalPrice,
                           discount: product.discount,
                           isFlashSale: !!product.isFlashSale,
-                        })
-                      }
+                        });
+                      }}
                       className="bg-white rounded-[14px] p-[6px] shadow-[-2px_2px_10px_#0000003f] hover:scale-105 transition-transform"
                       aria-label={`${fav ? "Remove from" : "Add to"} favorites`}
                       title={fav ? "Remove from favorites" : "Add to favorites"}
@@ -218,7 +222,8 @@ const ProductGrid = () => {
                   </div>
 
                   <button
-                    onClick={() =>
+                    onClick={(e) => {
+                      e.stopPropagation();
                       addToCart({
                         id: product.id,
                         name: product.name,
@@ -228,8 +233,8 @@ const ProductGrid = () => {
                         image: product.image,
                         rating: product.rating,
                         reviews: product.reviews,
-                      })
-                    }
+                      });
+                    }}
                     className="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg font-semibold transition-colors mt-2"
                   >
                     Add to Cart

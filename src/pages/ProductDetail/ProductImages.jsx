@@ -7,6 +7,7 @@ const ProductImages = () => {
 
   // Product image database
   const productImages = {
+    // New Arrivals products
     1: [
       "/images/img_frame_9.png",
       "/images/img_frame_9_1.png",
@@ -25,6 +26,19 @@ const ProductImages = () => {
       "/images/img_frame_9_8.png",
       "/images/img_frame_9_9.png",
     ],
+    4: [
+      "/images/img_frame_9_2.png",
+      "/images/img_frame_9_10.png",
+      "/images/img_frame_9_11.png",
+      "/images/img_frame_9_12.png",
+    ],
+    5: [
+      "/images/img_frame_9_3.png",
+      "/images/img_frame_9_13.png",
+      "/images/img_frame_9_14.png",
+      "/images/img_frame_9_15.png",
+    ],
+    // Popular Items products
     101: [
       "/images/img_frame_9_11.png",
       "/images/img_frame_9_12.png",
@@ -37,14 +51,64 @@ const ProductImages = () => {
       "/images/img_frame_9_16.png",
       "/images/img_frame_9_17.png",
     ],
+    103: [
+      "/images/img_frame_9_13.png",
+      "/images/img_frame_9_18.png",
+      "/images/img_frame_9_19.png",
+      "/images/img_frame_9_20.png",
+    ],
+    104: [
+      "/images/img_frame_9_14.png",
+      "/images/img_frame_9_21.png",
+      "/images/img_frame_9_22.png",
+      "/images/img_frame_9_1.png",
+    ],
+    105: [
+      "/images/img_frame_9_15.png",
+      "/images/img_frame_9_2.png",
+      "/images/img_frame_9_3.png",
+      "/images/img_frame_9_4.png",
+    ],
+    // Products page products
+    201: [
+      "/images/img_frame_9.png",
+      "/images/img_frame_9_5.png",
+      "/images/img_frame_9_6.png",
+      "/images/img_frame_9_7.png",
+    ],
+    202: [
+      "/images/img_frame_9_294x248.png",
+      "/images/img_frame_9_8.png",
+      "/images/img_frame_9_9.png",
+      "/images/img_frame_9_10.png",
+    ],
+    203: [
+      "/images/img_frame_9_1.png",
+      "/images/img_frame_9_11.png",
+      "/images/img_frame_9_12.png",
+      "/images/img_frame_9_13.png",
+    ],
+    // Promo products
+    301: [
+      "/images/img_frame_9.png",
+      "/images/img_frame_9_14.png",
+      "/images/img_frame_9_15.png",
+      "/images/img_frame_9_16.png",
+    ],
+    302: [
+      "/images/img_frame_9_294x248.png",
+      "/images/img_frame_9_17.png",
+      "/images/img_frame_9_18.png",
+      "/images/img_frame_9_19.png",
+    ],
   };
 
   // Get current product images or fallback to default
   const images = productImages[id] || [
-    "/images/img_frame_121.png",
-    "/images/img_frame_123.png",
-    "/images/img_frame_124.png",
     "/images/img_frame_9.png",
+    "/images/img_frame_9_1.png",
+    "/images/img_frame_9_2.png",
+    "/images/img_frame_9_3.png",
   ];
 
   return (
@@ -73,11 +137,19 @@ const ProductImages = () => {
               }
               className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 shadow-md transition-all"
             >
-              <img
-                src="/images/img_arrow_left.svg"
-                alt="Previous"
+              <svg
                 className="w-4 h-4"
-              />
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
             </button>
             <button
               onClick={() =>
@@ -85,13 +157,21 @@ const ProductImages = () => {
                   selectedImage < images.length - 1 ? selectedImage + 1 : 0
                 )
               }
-              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 shadow-md transition-all rotate-180"
+              className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-80 hover:bg-opacity-100 rounded-full p-2 shadow-md transition-all"
             >
-              <img
-                src="/images/img_arrow_left.svg"
-                alt="Next"
+              <svg
                 className="w-4 h-4"
-              />
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
             </button>
           </>
         )}

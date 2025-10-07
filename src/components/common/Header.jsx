@@ -80,7 +80,7 @@ const Header = () => {
   };
   const dropdownRef = useRef(null);
 
-  const { getFavoritesCount } = useFavorites();
+  const { count } = useFavorites();
 
   // Sample products data for suggestions
   const allProducts = [
@@ -354,7 +354,9 @@ const Header = () => {
                     >
                       {suggestion.title}
                       {suggestion.isCategory && (
-                        <span className="text-xs text-gray-500 ml-2">(Category)</span>
+                        <span className="text-xs text-gray-500 ml-2">
+                          (Category)
+                        </span>
                       )}
                     </button>
                   ))}
@@ -389,7 +391,7 @@ const Header = () => {
                 />
               </button>
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center font-['Plus_Jakarta_Sans']">
-                {getFavoritesCount()}
+                {count}
               </span>
             </div>
 
@@ -507,7 +509,9 @@ const Header = () => {
                     type="text"
                     placeholder="Search products..."
                     value={mobileSearchQuery}
-                    onChange={(e) => handleMobileSearchInputChange(e.target.value)}
+                    onChange={(e) =>
+                      handleMobileSearchInputChange(e.target.value)
+                    }
                     onKeyPress={handleMobileSearchKeyPress}
                     onFocus={() => {
                       if (mobileSearchQuery.trim()) {
@@ -568,7 +572,9 @@ const Header = () => {
                       >
                         {suggestion.title}
                         {suggestion.isCategory && (
-                          <span className="text-xs text-gray-500 ml-2">(Category)</span>
+                          <span className="text-xs text-gray-500 ml-2">
+                            (Category)
+                          </span>
                         )}
                       </button>
                     ))}

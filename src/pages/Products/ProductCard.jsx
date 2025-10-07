@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import RatingBar from "../../components/ui/RatingBar";
 import { useCart } from "../../context/CartContext";
 import { useFavorites } from "../../context/FavoritesContext";
@@ -16,6 +17,7 @@ const ProductCard = ({
 }) => {
   const { addToCart } = useCart();
   const { isFav, toggle } = useFavorites();
+  const navigate = useNavigate();
 
   const favorite = isFav(id);
 
@@ -62,7 +64,10 @@ const ProductCard = ({
   };
 
   return (
-    <div className="bg-white border border-[#cbcbcb] rounded-2xl p-3 lg:p-4 hover:shadow-lg transition-shadow duration-300">
+    <div
+      className="bg-white border border-[#cbcbcb] rounded-2xl p-3 lg:p-4 hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+      onClick={() => navigate(`/product/${id}`)}
+    >
       <div className="relative mb-4">
         <img
           src={image}
@@ -78,7 +83,10 @@ const ProductCard = ({
             </div>
           )}
           <button
-            onClick={handleFavoriteClick}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleFavoriteClick();
+            }}
             className="bg-white p-2 rounded-xl shadow-[-2px_2px_10px_#0000003f] hover:bg-gray-50 transition-colors duration-200 ml-auto"
             aria-label={favorite ? "Remove from favorites" : "Add to favorites"}
             title={favorite ? "Remove from favorites" : "Add to favorites"}
@@ -139,7 +147,10 @@ const ProductCard = ({
         </div>
 
         <button
-          onClick={() => addToCart(productForCart)}
+          onClick={(e) => {
+            e.stopPropagation();
+            addToCart(productForCart);
+          }}
           className="w-full bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg font-semibold transition-colors mt-3"
         >
           Add to Cart

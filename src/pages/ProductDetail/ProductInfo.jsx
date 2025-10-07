@@ -14,6 +14,7 @@ const ProductInfo = () => {
 
   // Product database
   const productDatabase = {
+    // New Arrivals products
     1: {
       id: 1,
       name: "Hoodie Gray",
@@ -41,6 +42,25 @@ const ProductInfo = () => {
       image: "/images/img_frame_9_1.png",
       rating: 4.5,
     },
+    4: {
+      id: 4,
+      name: "Leather Bomber Jacket",
+      price: "$125.00",
+      originalPrice: "$150.00",
+      discountedPrice: "$125.00",
+      image: "/images/img_frame_9_2.png",
+      rating: 4.5,
+    },
+    5: {
+      id: 5,
+      name: "Beach Hat",
+      price: "$40.00",
+      originalPrice: "$50.00",
+      discountedPrice: "$40.00",
+      image: "/images/img_frame_9_3.png",
+      rating: 4.5,
+    },
+    // Popular Items products
     101: {
       id: 101,
       name: "Vans Magenta",
@@ -57,6 +77,80 @@ const ProductInfo = () => {
       originalPrice: "$30.00",
       discountedPrice: "$25.00",
       image: "/images/img_frame_9_12.png",
+      rating: 4.5,
+    },
+    103: {
+      id: 103,
+      name: "White Eagle Shirt",
+      price: "$20.99",
+      originalPrice: "$29.99",
+      discountedPrice: "$20.99",
+      image: "/images/img_frame_9_13.png",
+      rating: 4.5,
+    },
+    104: {
+      id: 104,
+      name: "Plain White Hat",
+      price: "$55.00",
+      originalPrice: "$65.00",
+      discountedPrice: "$55.00",
+      image: "/images/img_frame_9_14.png",
+      rating: 4.5,
+    },
+    105: {
+      id: 105,
+      name: "Always Inspiring Shirt",
+      price: "$15.00",
+      originalPrice: "$20.00",
+      discountedPrice: "$15.00",
+      image: "/images/img_frame_9_15.png",
+      rating: 4.5,
+    },
+    // Products page products
+    201: {
+      id: 201,
+      name: "Hoodie Gray",
+      price: "$60.00",
+      originalPrice: "$80.00",
+      discountedPrice: "$60.00",
+      image: "/images/img_frame_9.png",
+      rating: 4.5,
+    },
+    202: {
+      id: 202,
+      name: "White Hoodie",
+      price: "$22.00",
+      originalPrice: "$30.00",
+      discountedPrice: "$22.00",
+      image: "/images/img_frame_9_294x248.png",
+      rating: 4.5,
+    },
+    203: {
+      id: 203,
+      name: "Audere Hoodie",
+      price: "$30.00",
+      originalPrice: "$35.00",
+      discountedPrice: "$30.00",
+      image: "/images/img_frame_9_1.png",
+      rating: 4.5,
+    },
+    // Promo products
+    301: {
+      id: 301,
+      name: "Beach Hat",
+      price: "$40.00",
+      originalPrice: "$50.00",
+      discountedPrice: "$40.00",
+      image: "/images/img_frame_9.png",
+      rating: 4.5,
+    },
+    302: {
+      id: 302,
+      name: "Sneakers Brown Nike",
+      price: "$250.00",
+      originalPrice: "$300.00",
+      discountedPrice: "$250.00",
+      image: "/images/img_frame_9_294x248.png",
       rating: 4.5,
     },
   };

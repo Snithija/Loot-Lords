@@ -1,10 +1,12 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartContext";
 import { useFavorites } from "../../context/FavoritesContext";
 
 const PopularItems = () => {
   const { addToCart } = useCart();
   const { isFav, toggle } = useFavorites();
+  const navigate = useNavigate();
 
   const popularProducts = [
     {
@@ -185,7 +187,8 @@ const PopularItems = () => {
               return (
                 <div
                   key={product.id}
-                  className="bg-white border border-[#cbcbcb] rounded-[16px] p-[10px] hover:shadow-lg transition-shadow duration-300"
+                  className="bg-white border border-[#cbcbcb] rounded-[16px] p-[10px] hover:shadow-lg transition-shadow duration-300 cursor-pointer"
+                  onClick={() => navigate(`/product/${product.id}`)}
                 >
                   {/* Product Image Container */}
                   <div className="relative w-full h-[200px] sm:h-[240px] md:h-[294px] mb-[14px]">
@@ -206,7 +209,8 @@ const PopularItems = () => {
 
                     {/* Favorite Button */}
                     <button
-                      onClick={() =>
+                      onClick={(e) => {
+                        e.stopPropagation();
                         toggle(product.id, {
                           id: product.id,
                           name: product.name,
@@ -216,8 +220,8 @@ const PopularItems = () => {
                           price: priceNow,
                           originalPrice: priceOld,
                           isFlashSale: !!product.hasFlashSale,
-                        })
-                      }
+                        });
+                      }}
                       className="absolute top-[14px] right-[12px] bg-white rounded-[14px] p-[6px] shadow-[-2px_2px_10px_#0000003f] hover:bg-gray-50 transition-colors duration-200"
                       aria-label={
                         fav ? "Remove from favorites" : "Add to favorites"
@@ -284,7 +288,10 @@ const PopularItems = () => {
 
                     {/* Add to Cart Button */}
                     <button
-                      onClick={() => addToCart(cartItem)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addToCart(cartItem);
+                      }}
                       className="mt-2 w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-lg font-['Plus_Jakarta_Sans'] font-semibold transition-colors"
                     >
                       Add to Cart
